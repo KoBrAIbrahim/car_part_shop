@@ -1,0 +1,549 @@
+{
+  "welcome": {
+    "title": "Welcome to Car Parts Shop",
+    "subtitle": "Find the perfect parts for your vehicle",
+    "get_started": "Get Started"
+  },
+  "auth": {
+    "login": {
+      "no_account": "Don't have an account? ",
+      "title": "Welcome Back!",
+      "email": "Email",
+      "password": "Password",
+      "remember_me": "Remember me",
+      "login_button": "Login",
+      "signup_link": "Don't have an account? Sign up",
+      "forgot_password": "Forgot Password?",
+      "reset_password": "Reset Password",
+      "reset_password_desc": "Enter your email and we'll send you a password reset link",
+      "send_reset_link": "Send Reset Link",
+      "reset_email_sent": "Password reset link sent to your email",
+      "reset_failed": "Password reset failed. Please try again.",
+      "reset_link_expired": "Password reset link has expired. Please request a new one.",
+      "no_email_found": "No email found for password reset",
+      "customer_not_found": "No account found with this email address",
+      "email_required": "Email is required",
+      "invalid_credentials": "Email or password is incorrect",
+      "network_error": "Network connection error", 
+      "login_failed": "Login failed, please try again"
+    },
+    "reset": {
+      "title": "Reset Your Password",
+      "subtitle": "Paste the reset link from your email and set a new password",
+      "reset_url": "Password Reset Link",
+      "new_password": "New Password",
+      "confirm_password": "Confirm New Password",
+      "reset_button": "Reset Password",
+      "back_to_login": "Back to Login",
+      "use_reset_link": "Already have a reset link? Use it here",
+      "success_message": "Password reset successfully! You can now login with your new password.",
+      "invalid_reset_url": "Invalid reset link. Please check the link from your email."
+    },
+    "role_selection": {
+      "title": "Select Account Type",
+      "choose_role": "How would you like to join us?",
+      "regular_buyer": "Regular Buyer",
+      "garage_owner": "Garage Owner",
+      "regular_buyer_desc": "Search and buy car parts for your vehicle",
+      "garage_owner_desc": "Manage your garage and help customers find parts"
+    },
+    "signup": {
+      "buyer_title": "Buyer Account",
+      "garage_owner_title": "Garage Account",
+      "full_name": "Full Name",
+      "city": "City",
+      "address": "Address",
+      "address_hint": "Enter your detailed address (street, building number, etc.)",
+      "mobile": "Mobile Number",
+      "email": "Email",
+      "garage_name": "Garage Name",
+      "garage_address": "Garage Address",
+      "vat_number": "VAT Number",
+      "vat_number_optional": "Optional",
+      "add_garage_photo": "Add Garage Photo",
+      "garage_owner_notice": "You will be approved by the application administrator as a garage owner",
+      "garage_owner_pending": "Your registration will be reviewed by our administrators. We'll notify you when your account is approved.",
+      "password": "Password",
+      "confirm_password": "Confirm Password",
+      "signup_button": "Sign Up",
+      "login_link": "Already have an account? Login"
+    },
+    "validation": {
+      "required_field": "This field is required",
+      "address_required": "Address is required",
+      "address_too_short": "Address is too short, must be at least 5 characters",
+      "invalid_email": "Please enter a valid email",
+      "passwords_do_not_match": "Passwords do not match",
+      "passwords_dont_match": "Passwords do not match",
+      "password_too_short": "Password must be at least 6 characters",
+      "last_name_required": "Last name is required",
+      "phone_already_used": "This phone number is already in use. Please use a different number.",
+      "email_already_used": "This email is already in use. Please use a different email.",
+      "phone_update_failed": "Failed to update phone number. Please try again.",
+      "phone_check_failed": "This phone number is already in use. Please change it.",
+      "email_check_failed": "Failed to verify email address. Please try again.",
+      "invalid_phone_format": "Invalid phone number format. Please enter a valid number.",
+      "signup_failed": "Failed to create account. Please try again.",
+      "login_after_signup_failed": "Account created but automatic login failed.",
+      "garage_photo_required": "Garage photo is required. Please upload a photo of your garage."
+    },
+    "loading": {
+      "verifying_credentials": "Verifying your credentials...",
+      "logging_in": "Logging you in...",
+      "creating_account": "Creating your account...",
+      "setting_up_profile": "Setting up your profile...",
+      "please_wait": "Please wait, this may take a moment"
+    },
+    "city": "City",
+    "select_city": "Select a city",
+    "auth": {
+      "login_failed": "Login failed. Please check your credentials.",
+      "invalid_credentials": "Invalid login credentials."
+    }
+  },
+  "settings": {
+    "theme": "Theme",
+    "dark_mode": "Dark Mode",
+    "light_mode": "Light Mode"
+  },
+  "user": {
+    "nav": {
+      "home": "Home",
+      "tools": "Tools",
+      "cart": "My Cart",
+      "sales": "Sales & Offers",
+      "settings": "Settings"
+    },
+    "sales": {
+      "title": "Sales & Offers",
+      "subtitle": "Discover amazing deals and special offers",
+      "flash_deals": "Flash Deals",
+      "flash_deals_desc": "Limited time offers with huge discounts",
+      "discounts": "Discounts",
+      "discounts_desc": "Special discounts on selected items",
+      "seasonal": "Seasonal",
+      "seasonal_desc": "Seasonal offers and promotions",
+      "premium": "Premium",
+      "premium_desc": "Exclusive deals for premium customers"
+    },
+    "home": {
+      "welcome": "Welcome to Car Parts Shop",
+      "subtitle": "Browse car makes and find the perfect parts",
+      "car_makes": "Car Makes",
+      "search_hint": "Search for part name or part number",
+      "loading": "Loading car makes...",
+      "error": "Failed to load car makes",
+      "retry": "Retry",
+      "no_data": "No car makes available"
+    },
+    "tools": {
+      "title": "Tools",
+      "description": "Car diagnostic and maintenance tools",
+      "coming_soon": "Coming Soon",
+      "search_hint": "Search tools...",
+      "loading": "Loading tools...",
+      "error": "Error loading tools",
+      "retry": "Retry",
+      "no_tools_found": "No tools found",
+      "tools_available": "tools available",
+      "refresh": "Refresh",
+      "in_stock": "In Stock",
+      "out_of_stock": "Out of Stock"
+    },
+    "cart": {
+      "title": "My Cart",
+      "empty_message": "Your cart is empty",
+      "start_shopping": "Start Shopping"
+    },
+    "car_details": {
+      "title": "Car Details",
+      "select_car_details": "Select Car Details",
+      "model": "Model",
+      "year": "Year", 
+      "engine": "Engine",
+      "select_model": "Select Model",
+      "select_year": "Select Year",
+      "select_engine": "Select Engine",
+      "continue": "Continue",
+      "loading_models": "Loading models...",
+      "loading_years": "Loading years...",
+      "loading_engines": "Loading engines...",
+      "error_loading_models": "Failed to load models",
+      "error_loading_years": "Failed to load years",
+      "error_loading_engines": "Failed to load engines",
+      "car_not_found": "Car configuration not found in database",
+      "error_getting_car_id": "Error getting car ID"
+    },
+    "car_parts": {
+      "title": "Car Parts",
+      "total_parts": "{count} parts found", 
+      "search_hint": "Search parts...",
+      "filter_sort": "Filter & Sort",
+      "filter_by_category": "Filter by Category",
+      "category": "Category",
+      "all_categories": "All",
+      "sort_by": "Sort by",
+      "sort_name": "Name",
+      "sort_price": "Price", 
+      "ascending": "Ascending",
+      "descending": "Descending",
+      "apply_filters": "Apply Filters",
+      "reset_filters": "Reset",
+      "loading_parts": "Loading parts...",
+      "parts_found": "parts found",
+      "sort_price_low_to_high": "Price (Low to High)",
+      "sort_price_high_to_low": "Price (High to Low)",
+      "sort_name_a_to_z": "Name (A-Z)",
+      "sort_name_z_to_a": "Name (Z-A)",
+      "no_parts_found": "No parts found",
+      "search_hint_parts": "Search parts...",
+      "part_not_found": "Part not found",
+      "error_loading_parts": "Failed to load parts",
+      "part_details": "Part Details",
+      "add_to_cart": "Add to Cart",
+      "out_of_stock": "Out of Stock",
+      "quantity": "Quantity",
+      "price": "Price",
+      "garage_price": "Garage Price",
+      "product_type": "Product Type",
+      "part_number": "Part Number",
+      "description": "Description",
+      "images": "Images",
+      "added_to_cart": "added to cart",
+      "view_cart": "VIEW CART",
+      "error_adding_to_cart": "Error adding to cart",
+      "showing_parts": "Showing {0} parts",
+      "filtered_from_total": "filtered from {0} total",
+      "no_parts_match_filter": "No parts match current filters",
+      "scroll_for_more": "Scroll for more",
+      "loading_more": "Loading more parts...",
+      "all_parts_loaded": "All parts loaded"
+    },
+    "settings": {
+      "title": "Settings",
+      "profile": "Profile",
+      "manage_account": "Manage your account settings",
+      "general": "General Settings",
+      "language": "Language",
+      "notifications": "Notifications",
+      "help": "Help",
+      "about": "About",
+      "logout": "Logout",
+      "logout_confirm": "Confirm Logout",
+      "logout_message": "Are you sure you want to logout?",
+      "logging_out": "Logging out...",
+      "cancel": "Cancel",
+      "version": "Version {}"
+    }
+  },
+  "about": {
+    "title": "About Car Parts Shop",
+    "app_name": "Car Parts Shop",
+    "app_description": "Your one-stop destination for all car parts and accessories. We provide high-quality automotive parts for various car makes and models.",
+    "mission_title": "Our Mission",
+    "mission_description": "To provide car owners and garage professionals with easy access to genuine and high-quality car parts at competitive prices.",
+    "features_title": "Features",
+    "features": {
+      "search": "Advanced Search",
+      "search_desc": "Find parts by car make, model, or part number",
+      "catalog": "Extensive Catalog",
+      "catalog_desc": "Wide range of parts for different car brands",
+      "quality": "Quality Assurance",
+      "quality_desc": "All parts are tested and verified for quality",
+      "support": "Expert Support",
+      "support_desc": "Get help from our automotive experts",
+      "delivery": "Fast Delivery",
+      "delivery_desc": "Quick and reliable delivery to your location",
+      "warranty": "Warranty",
+      "warranty_desc": "All parts come with manufacturer warranty"
+    },
+    "app_info": "App Information",
+    "version": "Version",
+    "build_number": "Build Number",
+    "developer": "Developer",
+    "developer_name": "Car Parts Solutions Team",
+    "contact_title": "Contact Us",
+    "contact_info": "For support and inquiries, please contact us:",
+    "email": "Email",
+    "phone": "Phone",
+    "website": "Website",
+    "social_media": "Follow Us",
+    "legal_title": "Legal",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service",
+    "licenses": "Open Source Licenses",
+    "copyright": "© 2025 Car Parts Shop. All rights reserved.",
+    "powered_by": "Powered by Flutter",
+    "acknowledgments_title": "Acknowledgments",
+    "acknowledgments_desc": "We thank all the open source developers and the Flutter community for making this app possible.",
+    "feedback_title": "Feedback",
+    "feedback_desc": "We value your feedback! Help us improve the app by sharing your thoughts and suggestions.",
+    "rate_app": "Rate This App",
+    "send_feedback": "Send Feedback"
+  },
+  "help": {
+    "title": "Help & Support",
+    "subtitle": "Get help with using the Car Parts Shop application",
+    "getting_started": {
+      "title": "Getting Started",
+      "description": "Learn the basics of using our application",
+      "topics": [
+        "Setting up your account",
+        "Navigating the interface",
+        "Understanding app features"
+      ]
+    },
+    "profile_management": {
+      "title": "Profile Management",
+      "description": "How to manage your profile and account settings",
+      "edit_profile": {
+        "title": "How to Edit Your Profile",
+        "steps": [
+          "Go to Settings from the bottom navigation",
+          "Tap on 'Profile' at the top",
+          "Edit your personal information",
+          "Tap 'Save Changes' to update"
+        ]
+      },
+      "change_password": {
+        "title": "How to Change Your Password",
+        "steps": [
+          "Navigate to Settings → Profile",
+          "Scroll down to find 'Reset Password' button",
+          "Tap the 'Reset Password' button",
+          "Check your email for reset instructions",
+          "Follow the link in the email to set a new password"
+        ]
+      },
+      "update_contact": {
+        "title": "Update Contact Information",
+        "steps": [
+          "Go to Settings → Profile",
+          "Edit your phone number or email",
+          "Verify the changes if required",
+          "Save your updates"
+        ]
+      }
+    },
+    "app_settings": {
+      "title": "App Settings",
+      "description": "Customize your app experience",
+      "language": {
+        "title": "Change Language",
+        "steps": [
+          "Open Settings from bottom navigation",
+          "Find 'Language' option",
+          "Select from available languages: English, Arabic, Hebrew",
+          "App will restart with new language"
+        ]
+      },
+      "theme": {
+        "title": "Change Theme (Dark/Light Mode)",
+        "steps": [
+          "Go to Settings page",
+          "Find the 'Theme' toggle switch",
+          "Toggle between Dark and Light mode",
+          "Changes apply immediately"
+        ]
+      },
+      "notifications": {
+        "title": "Notification Settings",
+        "steps": [
+          "Navigate to Settings",
+          "Tap on 'Notifications'",
+          "Configure your notification preferences",
+          "Enable or disable specific types"
+        ]
+      }
+    },
+    "account_security": {
+      "title": "Account Security",
+      "description": "Keep your account safe and secure",
+      "topics": [
+        "Use a strong, unique password",
+        "Keep your email address updated",
+        "Log out from shared devices",
+        "Report any suspicious activity"
+      ]
+    },
+    "troubleshooting": {
+      "title": "Troubleshooting",
+      "description": "Common issues and solutions",
+      "common_issues": [
+        {
+          "problem": "Can't log in to my account",
+          "solution": "Try resetting your password or check your internet connection"
+        },
+        {
+          "problem": "App crashes or freezes",
+          "solution": "Close and restart the app, or restart your device"
+        },
+        {
+          "problem": "Changes not saving",
+          "solution": "Check your internet connection and try again"
+        },
+        {
+          "problem": "Language not changing",
+          "solution": "Restart the app after changing language settings"
+        }
+      ]
+    },
+    "contact_support": {
+      "title": "Contact Support",
+      "description": "Need more help? Get in touch with our support team",
+      "email": "Email: support@carpartsshop.com",
+      "phone": "Phone: +970-XXX-XXXX",
+      "response_time": "We typically respond within 24 hours"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "questions": [
+        {
+          "question": "How do I create an account?",
+          "answer": "Tap 'Sign Up' on the login screen and follow the registration process"
+        },
+        {
+          "question": "Can I change my account type?",
+          "answer": "Contact support to change from buyer to garage owner or vice versa"
+        },
+        {
+          "question": "Is my data secure?",
+          "answer": "Yes, we use industry-standard encryption to protect your information"
+        },
+        {
+          "question": "How do I delete my account?",
+          "answer": "Contact our support team to request account deletion"
+        }
+      ]
+    },
+    "tips": {
+      "title": "Tips & Best Practices",
+      "items": [
+        "Keep your profile information up to date",
+        "Use the search function to find parts quickly",
+        "Enable notifications for important updates",
+        "Regularly check for app updates",
+        "Log out when using shared devices"
+      ]
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "personal_info": "Personal Information",
+    "account_info": "Account Information",
+    "garage_info": "Garage Information",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "city": "City",
+    "garage_owner": "Garage Owner",
+    "regular_buyer": "Regular Buyer",
+    "member_since": "Member Since",
+    "last_updated": "Last Updated",
+    "customer_id": "Customer ID",
+    "update_success": "Profile updated successfully!",
+    "update_failed": "Failed to update profile. Please try again.",
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "unknown": "Unknown",
+    "vat_number": "VAT Number",
+    "garage_name": "Garage Name",
+    "garage_address": "Garage Address",
+    "garage_image": "Garage Image",
+    "no_garage_image": "No garage image available",
+    "image_load_error": "Failed to load image",
+    "loading_image": "Loading image...",
+    "image_load_failed": "Failed to load image",
+    "invalid_image_format": "Invalid image format",
+    "limited_access_title": "Limited Data Access",
+    "limited_access_message": "Some profile information may be limited due to your current account plan",
+    "garage_status_pending": "Awaiting Approval",
+    "garage_status_pending_message": "Your garage registration is pending approval. You can edit your garage information while waiting.",
+    "garage_status_rejected": "Registration Rejected",
+    "garage_status_rejected_message": "Your garage registration has been rejected. Please contact the administrator for more information.",
+    "garage_status_approved": "Garage Approved",
+    "garage_status_approved_message": "Your garage has been approved. Information editing is restricted.",
+    "contact_admin": "Contact Administrator",
+    "whatsapp_number": "+972-123-456-789",
+    "refreshing_status": "Refreshing account status...",
+    "status_refreshed": "Account status refreshed successfully",
+    "refresh_failed": "Failed to refresh account status",
+    "reset": {
+      "reset_button": "Reset Password"
+    }
+  },
+  "validation": {
+    "required_field": "This field is required",
+    "invalid_phone_format": "Invalid phone number format"
+  },
+  "cities": {
+    "Ramallah": "Ramallah",
+    "Nablus": "Nablus",
+    "Bethlehem": "Bethlehem",
+    "Hebron": "Hebron",
+    "Jenin": "Jenin",
+    "Tulkarm": "Tulkarm",
+    "Qalqilya": "Qalqilya",
+    "Salfit": "Salfit",
+    "Jericho": "Jericho",
+    "Tubas": "Tubas",
+    "Al-Bireh": "Al-Bireh",
+    "Beit Jala": "Beit Jala",
+    "Beit Sahour": "Beit Sahour",
+    "Dura": "Dura",
+    "Yatta": "Yatta",
+    "Halhul": "Halhul",
+    "Jerusalem": "Jerusalem",
+    "Gaza": "Gaza",
+    "Khan Younis": "Khan Younis",
+    "Rafah": "Rafah",
+    "Doura": "Doura",
+    "Bani Naim": "Bani Naim",
+    "Tarqumiyah": "Tarqumiyah",
+    "Idhna": "Idhna",
+    "Beit Ummar": "Beit Ummar",
+    "Sa'ir": "Sa'ir",
+    "Beit Awa": "Beit Awa",
+    "Surif": "Surif",
+    "Al-Shuyukh": "Al-Shuyukh",
+    "Beit Kahil": "Beit Kahil",
+    "Beit Fajjar": "Beit Fajjar",
+    "Al-Arroub": "Al-Arroub",
+    "Husan": "Husan",
+    "Nahalin": "Nahalin",
+    "Wadi Fukin": "Wadi Fukin",
+    "Al-Walaja": "Al-Walaja",
+    "Battir": "Battir",
+    "Al-Khader": "Al-Khader",
+    "Beit Skaria": "Beit Skaria",
+    "Tekoa": "Tekoa",
+    "Artas": "Artas",
+    "Za'atara": "Za'atara",
+    "Tuqu'": "Tuqu'",
+    "Beit Ta'mir": "Beit Ta'mir",
+    "Marah Rabah": "Marah Rabah",
+    "Kisan": "Kisan",
+    "Al-Ubeidiya": "Al-Ubeidiya",
+    "Abu Dis": "Abu Dis",
+    "Al-Eizariya": "Al-Eizariya",
+    "Anata": "Anata",
+    "Hizma": "Hizma",
+    "Bir Nabala": "Bir Nabala",
+    "Al-Jib": "Al-Jib",
+    "Beit Hanina": "Beit Hanina",
+    "Beit Iksa": "Beit Iksa",
+    "Qatanna": "Qatanna",
+    "Biddu": "Biddu",
+    "Beit Surik": "Beit Surik",
+    "Al-Qubeiba": "Al-Qubeiba",
+    "Beit Duqqu": "Beit Duqqu",
+    "An-Nabi Samwil": "An-Nabi Samwil",
+    "Rafat": "Rafat",
+    "Beit Ijza": "Beit Ijza",
+    "Al-Judeira": "Al-Judeira",
+    "Qalandiya": "Qalandiya",
+    "Ar-Ram": "Ar-Ram",
+    "Kafr Aqab": "Kafr Aqab"
+  }
+}

@@ -1,0 +1,533 @@
+{
+  "welcome": {
+    "title": "ברוך הבא לחנות חלקי הרכב",
+    "subtitle": "מצא את החלקים המושלמים לרכב שלך",
+    "get_started": "בואו נתחיל"
+  },
+  "auth": {
+    "login": {
+      "no_account": "אין לך חשבון? ",
+      "title": "ברוך הבא בחזרה!",
+      "email": "דוא\"ל",
+      "password": "סיסמה",
+      "remember_me": "זכור אותי",
+      "login_button": "התחברות",
+      "signup_link": "אין לך חשבון? הירשם",
+      "forgot_password": "שכחת סיסמה?",
+      "reset_password": "איפוס סיסמה",
+      "reset_password_desc": "הזן את האימייל שלך ונשלח לך קישור לאיפוס הסיסמה",
+      "send_reset_link": "שלח קישור איפוס",
+      "reset_email_sent": "קישור איפוס הסיסמה נשלח לאימייל שלך",
+      "reset_failed": "איפוס הסיסמה נכשל. אנא נסה שוב.",
+      "reset_link_expired": "קישור איפוס הסיסמה פג תוקף. אנא בקש קישור חדש.",
+      "no_email_found": "לא נמצא אימייל לאיפוס סיסמה",
+      "customer_not_found": "לא נמצא חשבון עם כתובת האימייל הזו",
+      "invalid_credentials": "האימייל או הסיסמה שגויים",
+      "network_error": "שגיאת רשת",
+      "login_failed": "כניסה נכשלה, אנא נסה שוב"
+    },
+    "reset": {
+      "title": "איפוס הסיסמה שלך",
+      "subtitle": "הדבק את קישור האיפוס מהאימייל שלך והגדר סיסמה חדשה",
+      "reset_url": "קישור איפוס סיסמה",
+      "new_password": "סיסמה חדשה",
+      "confirm_password": "אשר סיסמה חדשה",
+      "reset_button": "אפס סיסמה",
+      "back_to_login": "חזרה להתחברות",
+      "use_reset_link": "יש לך כבר קישור איפוס? השתמש בו כאן",
+      "success_message": "איפוס הסיסמה הצליח! כעת תוכל להתחבר עם הסיסמה החדשה שלך.",
+      "invalid_reset_url": "קישור איפוס לא תקין. אנא בדוק את הקישור מהאימייל שלך."
+    },
+    "role_selection": {
+      "title": "בחר סוג חשבון",
+      "choose_role": "איך תרצה להצטרף אלינו?",
+      "regular_buyer": "קונה רגיל",
+      "garage_owner": "בעל מוסך",
+      "regular_buyer_desc": "חפש וקנה חלקי חילוף לרכב שלך",
+      "garage_owner_desc": "נהל את המוסך שלך ועזור ללקוחות למצוא חלקים"
+    },
+    "signup": {
+      "buyer_title": "יצירת חשבון קונה",
+      "garage_owner_title": "יצירת חשבון מוסך",
+      "full_name": "שם מלא",
+      "city": "עיר",
+      "mobile": "מספר נייד",
+      "email": "דוא\"ל",
+      "garage_name": "שם המוסך",
+      "garage_address": "כתובת המוסך",
+      "vat_number": "מספר עוסק מורשה",
+      "vat_number_optional": "אופציונלי",
+      "add_garage_photo": "הוסף תמונת מוסך",
+      "garage_owner_notice": "חשבונך יאושר על ידי מנהל האפליקציה כבעל מוסך",
+      "garage_owner_pending": "הרשמתך תיבדק על ידי המנהלים שלנו. נודיע לך כאשר חשבונך יאושר.",
+      "password": "סיסמה",
+      "confirm_password": "אימות סיסמה",
+      "signup_button": "הרשמה",
+      "login_link": "כבר יש לך חשבון? התחבר"
+    },
+    "validation": {
+      "required_field": "שדה זה הוא חובה",
+      "invalid_email": "נא להזין כתובת דוא\"ל תקינה",
+      "passwords_dont_match": "הסיסמאות אינן תואמות",
+      "passwords_do_not_match": "הסיסמאות אינן תואמות",
+      "password_too_short": "הסיסמה חייבת להכיל לפחות 6 תווים",
+      "last_name_required": "שם המשפחה הוא חובה",
+      "phone_already_used": "מספר הטלפון הזה כבר בשימוש. אנא השתמש במספר אחר.",
+      "email_already_used": "כתובת הדוא\"ל הזו כבר בשימוש. אנא השתמש בכתובת אחרת.",
+      "phone_update_failed": "נכשלה בעדכון מספר הטלפון. נא לנסות שוב.",
+      "phone_check_failed": "מספר הטלפון הזה כבר בשימוש. נא לשנות אותו.",
+      "email_check_failed": "נכשלה בבדיקת כתובת הדוא\"ל. נא לנסות שוב.",
+      "invalid_phone_format": "פורמט מספר טלפון לא תקין. נא להזין מספר תקין.",
+      "signup_failed": "נכשלה ביצירת החשבון. נא לנסות שוב.",
+      "login_after_signup_failed": "החשבון נוצר אך הכניסה האוטומטית נכשלה.",
+      "garage_photo_required": "תמונת מוסך נדרשת. אנא העלה תמונה של המוסך שלך."
+    },
+    "loading": {
+      "verifying_credentials": "מאמת את הפרטים שלך...",
+      "logging_in": "מתחבר אותך...",
+      "creating_account": "יוצר את החשבון שלך...",
+      "setting_up_profile": "מגדיר את הפרופיל שלך...",
+      "please_wait": "אנא המתן, זה עלול לקחת רגע"
+    },
+    "city": "עיר",
+    "select_city": "בחר עיר",
+    "auth": {
+      "login_failed": "הכניסה נכשלה. נא לבדוק את הפרטים.",
+      "invalid_credentials": "פרטי הכניסה שגויים."
+    }
+  },
+  "settings": {
+    "theme": "נושא",
+    "dark_mode": "מצב כהה",
+    "light_mode": "מצב בהיר"
+  },
+  "user": {
+    "nav": {
+      "home": "בית",
+      "tools": "כלים",
+      "cart": "עגלת קניות",
+      "sales": "מבצעים והנחות",
+      "settings": "הגדרות"
+    },
+    "sales": {
+      "title": "מבצעים והנחות",
+      "subtitle": "גלה הצעות מדהימות והנחות מיוחדות",
+      "flash_deals": "עסקאות בזק",
+      "flash_deals_desc": "הצעות זמן מוגבל עם הנחות ענקיות",
+      "discounts": "הנחות",
+      "discounts_desc": "הנחות מיוחדות על פריטים נבחרים",
+      "seasonal": "עונתי",
+      "seasonal_desc": "הצעות וקידום מכירות עונתיות",
+      "premium": "פרמיום",
+      "premium_desc": "עסקאות בלעדיות ללקוחות פרמיום"
+    },
+    "home": {
+      "welcome": "ברוך הבא לחנות חלקי הרכב",
+      "subtitle": "עיין במותגי רכבים ומצא את החלקים המושלמים",
+      "car_makes": "מותגי רכבים",
+      "search_hint": "חפש שם חלק או מספר חלק",
+      "loading": "טוען מותגי רכבים...",
+      "error": "שגיאה בטעינת מותגי הרכבים",
+      "retry": "נסה שוב",
+      "no_data": "אין מותגי רכבים זמינים"
+    },
+    "car_details": {
+      "title": "פרטי הרכב",
+      "select_car_details": "בחר פרטי רכב",
+      "model": "דגם",
+      "year": "שנה", 
+      "engine": "מנוע",
+      "select_model": "בחר דגם",
+      "select_year": "בחר שנה",
+      "select_engine": "בחר מנוע",
+      "continue": "המשך",
+      "loading_models": "טוען דגמים...",
+      "loading_years": "טוען שנים...",
+      "loading_engines": "טוען מנועים...",
+      "error_loading_models": "שגיאה בטעינת דגמים",
+      "error_loading_years": "שגיאה בטעינת שנים",
+      "error_loading_engines": "שגיאה בטעינת מנועים",
+      "car_not_found": "תצורת רכב לא נמצאה במאגר הנתונים",
+      "error_getting_car_id": "שגיאה בקבלת מזהה רכב"
+    },
+    "car_parts": {
+      "title": "חלקי רכב",
+      "total_parts": "נמצאו {count} חלקים", 
+      "search_hint": "חפש חלקים...",
+      "filter_sort": "סינון ומיון",
+      "filter_by_category": "סינון לפי קטגוריה",
+      "category": "קטגוריה",
+      "all_categories": "הכל",
+      "sort_by": "מיין לפי",
+      "sort_name": "שם",
+      "sort_price": "מחיר", 
+      "ascending": "עולה",
+      "descending": "יורד",
+      "apply_filters": "החל סינונים",
+      "reset_filters": "איפוס",
+      "loading_parts": "טוען חלקים...",
+      "parts_found": "חלקים נמצאו",
+      "sort_price_low_to_high": "מחיר (נמוך לגבוה)",
+      "sort_price_high_to_low": "מחיר (גבוה לנמוך)",
+      "sort_name_a_to_z": "שם (א-ת)",
+      "sort_name_z_to_a": "שם (ת-א)",
+      "no_parts_found": "לא נמצאו חלקים",
+      "search_hint_parts": "חפש חלקים...",
+      "part_not_found": "חלק לא נמצא",
+      "error_loading_parts": "שגיאה בטעינת חלקים",
+      "part_details": "פרטי חלק",
+      "add_to_cart": "הוסף לעגלה",
+      "out_of_stock": "אזל במלאי",
+      "quantity": "כמות",
+      "price": "מחיר",
+      "garage_price": "מחיר מוסך",
+      "product_type": "סוג מוצר",
+      "part_number": "מספר חלק",
+      "description": "תיאור",
+      "images": "תמונות",
+      "added_to_cart": "נוסף לעגלה",
+      "view_cart": "הצג עגלה",
+      "error_adding_to_cart": "שגיאה בהוספה לעגלה",
+      "showing_parts": "מציג {0} חלקים",
+      "scroll_for_more": "גלול לעוד",
+      "loading_more": "טוען עוד חלקים...",
+      "all_parts_loaded": "כל החלקים נטענו"
+    },
+    "tools": {
+      "title": "כלים",
+      "description": "כלי אבחון ותחזוקה לרכב",
+      "coming_soon": "בקרוב"
+    },
+    "cart": {
+      "title": "עגלת קניות",
+      "empty_message": "עגלת הקניות ריקה",
+      "start_shopping": "התחל לקנות"
+    },
+    "settings": {
+      "title": "הגדרות",
+      "profile": "פרופיל",
+      "manage_account": "נהל את הגדרות החשבון שלך",
+      "general": "הגדרות כלליות",
+      "language": "שפה",
+      "notifications": "התראות",
+      "help": "עזרה",
+      "about": "אודות",
+      "logout": "התנתק",
+      "logout_confirm": "אשר התנתקות",
+      "logout_message": "האם אתה בטוח שברצונך להתנתק?",
+      "logging_out": "מתנתק...",
+      "cancel": "ביטול",
+      "version": "גרסה {}"
+    }
+  },
+  "about": {
+    "title": "אודות חנות חלקי הרכב",
+    "app_name": "חנות חלקי הרכב",
+    "app_description": "היעד השלם שלך לכל חלקי הרכב והאביזרים. אנו מספקים חלקי רכב איכותיים למותגים ודגמי רכב שונים.",
+    "mission_title": "המשימה שלנו",
+    "mission_description": "לספק לבעלי רכבים ואנשי מקצוע במוסכים גישה קלה לחלקי חילוף מקוריים ואיכותיים במחירים תחרותיים.",
+    "features_title": "תכונות",
+    "features": {
+      "search": "חיפוש מתקדם",
+      "search_desc": "מצא חלקים לפי יצרן רכב, דגם או מספר חלק",
+      "catalog": "קטלוג נרחב",
+      "catalog_desc": "מגוון רחב של חלקים למותגי רכב שונים",
+      "quality": "הבטחת איכות",
+      "quality_desc": "כל החלקים נבדקים ומאושרים לאיכות",
+      "support": "תמיכת מומחים",
+      "support_desc": "קבל עזרה ממומחי הרכב שלנו",
+      "delivery": "משלוח מהיר",
+      "delivery_desc": "משלוח מהיר ואמין למיקום שלך",
+      "warranty": "אחריות",
+      "warranty_desc": "כל החלקים מגיעים עם אחריות יצרן"
+    },
+    "app_info": "מידע על האפליקציה",
+    "version": "גרסה",
+    "build_number": "מספר בנייה",
+    "developer": "מפתח",
+    "developer_name": "צוות פתרונות חלקי רכב",
+    "contact_title": "צור קשר",
+    "contact_info": "לתמיכה ופניות, אנא צור איתנו קשר:",
+    "email": "דוא\"ל",
+    "phone": "טלפון",
+    "website": "אתר אינטרנט",
+    "social_media": "עקוב אחרינו",
+    "legal_title": "משפטי",
+    "privacy_policy": "מדיניות פרטיות",
+    "terms_of_service": "תנאי שירות",
+    "licenses": "רישיונות קוד פתוח",
+    "copyright": "© 2025 חנות חלקי הרכב. כל הזכויות שמורות.",
+    "powered_by": "מופעל על ידי Flutter",
+    "acknowledgments_title": "הכרת תודה",
+    "acknowledgments_desc": "אנו מודים לכל מפתחי הקוד הפתוח וקהילת Flutter על הפיכת האפליקציה הזו לאפשרית.",
+    "feedback_title": "משוב",
+    "feedback_desc": "אנו מעריכים את המשוב שלך! עזור לנו לשפר את האפליקציה על ידי שיתוף המחשבות וההצעות שלך.",
+    "rate_app": "דרג את האפליקציה",
+    "send_feedback": "שלח משוב"
+  },
+  "help": {
+    "title": "עזרה ותמיכה",
+    "subtitle": "קבל עזרה בשימוש באפליקציית חנות חלקי הרכב",
+    "getting_started": {
+      "title": "תחילת העבודה",
+      "description": "למד את היסודות של השימוש באפליקציה שלנו",
+      "topics": [
+        "הגדרת החשבון שלך",
+        "ניווט בממשק",
+        "הבנת תכונות האפליקציה"
+      ]
+    },
+    "profile_management": {
+      "title": "ניהול פרופיל",
+      "description": "איך לנהל את הפרופיל והגדרות החשבון שלך",
+      "edit_profile": {
+        "title": "איך לערוך את הפרופיל שלך",
+        "steps": [
+          "עבור להגדרות מהניווט התחתון",
+          "הקש על 'פרופיל' בחלק העליון",
+          "ערוך את המידע האישי שלך",
+          "הקש 'שמור שינויים' לעדכון"
+        ]
+      },
+      "change_password": {
+        "title": "איך לשנות את הסיסמה שלך",
+        "steps": [
+          "נווט להגדרות ← פרופיל",
+          "גלול למטה כדי למצוא כפתור 'איפוס סיסמה'",
+          "הקש על כפתור 'איפוס סיסמה'",
+          "בדוק את האימייל שלך לקבלת הוראות איפוס",
+          "עקוב אחר הקישור באימייל כדי להגדיר סיסמה חדשה"
+        ]
+      },
+      "update_contact": {
+        "title": "עדכון פרטי קשר",
+        "steps": [
+          "עבור להגדרות ← פרופיל",
+          "ערוך את מספר הטלפון או האימייל שלך",
+          "אמת את השינויים במידת הצורך",
+          "שמור את העדכונים שלך"
+        ]
+      }
+    },
+    "app_settings": {
+      "title": "הגדרות אפליקציה",
+      "description": "התאם אישית את חוויית האפליקציה שלך",
+      "language": {
+        "title": "שינוי שפה",
+        "steps": [
+          "פתח הגדרות מהניווט התחתון",
+          "מצא את אפשרות 'שפה'",
+          "בחר מהשפות הזמינות: אנגלית, ערבית, עברית",
+          "האפליקציה תופעל מחדש עם השפה החדשה"
+        ]
+      },
+      "theme": {
+        "title": "שינוי נושא (מצב כהה/בהיר)",
+        "steps": [
+          "עבור לעמוד ההגדרות",
+          "מצא את מתג החלפת 'נושא'",
+          "החלף בין מצב כהה ובהיר",
+          "השינויים חלים מיד"
+        ]
+      },
+      "notifications": {
+        "title": "הגדרות התראות",
+        "steps": [
+          "נווט להגדרות",
+          "הקש על 'התראות'",
+          "קבע את העדפות ההתראות שלך",
+          "הפעל או השבת סוגים ספציפיים"
+        ]
+      }
+    },
+    "account_security": {
+      "title": "אבטחת חשבון",
+      "description": "שמור על החשבון שלך בטוח ומאובטח",
+      "topics": [
+        "השתמש בסיסמה חזקה וייחודית",
+        "שמור על כתובת האימייל שלך מעודכנת",
+        "התנתק ממכשירים משותפים",
+        "דווח על כל פעילות חשודה"
+      ]
+    },
+    "troubleshooting": {
+      "title": "פתרון בעיות",
+      "description": "בעיות נפוצות ופתרונות",
+      "common_issues": [
+        {
+          "problem": "לא יכול להתחבר לחשבון שלי",
+          "solution": "נסה לאפס את הסיסמה או בדוק את החיבור לאינטרנט"
+        },
+        {
+          "problem": "האפליקציה קורסת או קופאת",
+          "solution": "סגור והפעל מחדש את האפליקציה, או הפעל מחדש את המכשיר"
+        },
+        {
+          "problem": "השינויים לא נשמרים",
+          "solution": "בדוק את החיבור לאינטרנט ונסה שוב"
+        },
+        {
+          "problem": "השפה לא משתנה",
+          "solution": "הפעל מחדש את האפליקציה לאחר שינוי הגדרות השפה"
+        }
+      ]
+    },
+    "contact_support": {
+      "title": "צור קשר עם התמיכה",
+      "description": "צריך עזרה נוספת? צור קשר עם צוות התמיכה שלנו",
+      "email": "אימייל: support@carpartsshop.com",
+      "phone": "טלפון: +970-XXX-XXXX",
+      "response_time": "אנחנו בדרך כלל עונים תוך 24 שעות"
+    },
+    "faq": {
+      "title": "שאלות נפוצות",
+      "questions": [
+        {
+          "question": "איך אני יוצר חשבון?",
+          "answer": "הקש על 'הירשם' במסך ההתחברות ועקוב אחר תהליך הרישום"
+        },
+        {
+          "question": "האם אני יכול לשנות את סוג החשבון שלי?",
+          "answer": "צור קשר עם התמיכה כדי לשנות מקונה לבעל מוסך או להיפך"
+        },
+        {
+          "question": "האם הנתונים שלי בטוחים?",
+          "answer": "כן, אנחנו משתמשים בהצפנה סטנדרטית כדי להגן על המידע שלך"
+        },
+        {
+          "question": "איך אני מוחק את החשבון שלי?",
+          "answer": "צור קשר עם צוות התמיכה שלנו כדי לבקש מחיקת חשבון"
+        }
+      ]
+    },
+    "tips": {
+      "title": "טיפים ושיטות עבודה מומלצות",
+      "items": [
+        "שמור על מידע הפרופיל שלך מעודכן",
+        "השתמש בפונקציית החיפוש כדי למצוא חלקים במהירות",
+        "הפעל התראות לעדכונים חשובים",
+        "בדוק באופן קבוע עדכוני אפליקציה",
+        "התנתק בעת שימוש במכשירים משותפים"
+      ]
+    }
+  },
+  "profile": {
+    "title": "פרופיל",
+    "personal_info": "מידע אישי",
+    "account_info": "מידע חשבון",
+    "garage_info": "מידע מוסך",
+    "first_name": "שם פרטי",
+    "last_name": "שם משפחה",
+    "email": "דוא\"ל",
+    "phone": "מספר טלפון",
+    "city": "עיר",
+    "garage_owner": "בעל מוסך",
+    "regular_buyer": "קונה רגיל",
+    "member_since": "חבר מאז",
+    "last_updated": "עודכן לאחרונה",
+    "customer_id": "מזהה לקוח",
+    "update_success": "הפרופיל עודכן בהצלחה!",
+    "update_failed": "עדכון הפרופיל נכשל. אנא נסה שוב.",
+    "save": "שמור שינויים",
+    "cancel": "ביטול",
+    "unknown": "לא ידוע",
+    "vat_number": "מספר עוסק מורשה",
+    "garage_name": "שם המוסך",
+    "garage_address": "כתובת המוסך",
+    "garage_image": "תמונת המוסך",
+    "no_garage_image": "אין תמונת מוסך זמינה",
+    "image_load_error": "נכשל בטעינת התמונה",
+    "loading_image": "טוען תמונה...",
+    "image_load_failed": "נכשל בטעינת התמונה",
+    "invalid_image_format": "פורמט תמונה לא תקין",
+    "limited_access_title": "גישה מוגבלת לנתונים",
+    "limited_access_message": "חלק ממידע הפרופיל עלול להיות מוגבל בגלל תוכנית החשבון הנוכחית שלך",
+    "garage_status_pending": "ממתין לאישור",
+    "garage_status_pending_message": "רישום המוסך שלך ממתין לאישור. אתה יכול לערוך את פרטי המוסך בזמן ההמתנה.",
+    "garage_status_rejected": "הרישום נדחה",
+    "garage_status_rejected_message": "רישום המוסך שלך נדחה. אנא צור קשר עם המנהל לקבלת מידע נוסף.",
+    "garage_status_approved": "המוסך אושר",
+    "garage_status_approved_message": "המוסך שלך אושר. עריכת מידע מוגבלת.",
+    "contact_admin": "צור קשר עם המנהל",
+    "whatsapp_number": "+972-123-456-789",
+    "refreshing_status": "מרענן סטטוס חשבון...",
+    "status_refreshed": "סטטוס חשבון רוענן בהצלחה",
+    "refresh_failed": "רענון סטטוס חשבון נכשל",
+    "reset": {
+      "reset_button": "איפוס סיסמה"
+    }
+  },
+  "validation": {
+    "required_field": "שדה זה הוא חובה",
+    "invalid_phone_format": "פורמט מספר טלפון לא תקין"
+  },
+  "cities": {
+    "Ramallah": "רמאללה",
+    "Nablus": "שכם",
+    "Bethlehem": "בית לחם",
+    "Hebron": "חברון",
+    "Jenin": "ג'נין",
+    "Tulkarm": "טול כרם",
+    "Qalqilya": "קלקיליה",
+    "Salfit": "סלפית",
+    "Jericho": "יריחו",
+    "Tubas": "טובאס",
+    "Al-Bireh": "אל-בירה",
+    "Beit Jala": "בית ג'אלה",
+    "Beit Sahour": "בית סאחור",
+    "Dura": "דורא",
+    "Yatta": "יטא",
+    "Halhul": "חלחול",
+    "Jerusalem": "ירושלים",
+    "Gaza": "עזה",
+    "Khan Younis": "חאן יונס",
+    "Rafah": "רפיח",
+    "Doura": "דורא",
+    "Bani Naim": "בני נעים",
+    "Tarqumiyah": "טרקומיה",
+    "Idhna": "אדנה",
+    "Beit Ummar": "בית עומר",
+    "Sa'ir": "סעיר",
+    "Beit Awa": "בית עווה",
+    "Surif": "צוריף",
+    "Al-Shuyukh": "א-שיוח'",
+    "Beit Kahil": "בית כאחיל",
+    "Beit Fajjar": "בית פג'אר",
+    "Al-Arroub": "אל-עארוב",
+    "Husan": "חוסאן",
+    "Nahalin": "נחאלין",
+    "Wadi Fukin": "ואדי פוקין",
+    "Al-Walaja": "אל-ולג'ה",
+    "Battir": "בתיר",
+    "Al-Khader": "אל-ח'אדר",
+    "Beit Skaria": "בית סכריה",
+    "Tekoa": "תקוע",
+    "Artas": "ארטאס",
+    "Za'atara": "זעתרה",
+    "Tuqu'": "תקוע",
+    "Beit Ta'mir": "בית תעמיר",
+    "Marah Rabah": "מראח רבאח",
+    "Kisan": "כיסאן",
+    "Al-Ubeidiya": "אל-עובידיה",
+    "Abu Dis": "אבו דיס",
+    "Al-Eizariya": "אל-עיזריה",
+    "Anata": "ענאתא",
+    "Hizma": "חזמה",
+    "Bir Nabala": "ביר נבאלה",
+    "Al-Jib": "אל-ג'יב",
+    "Beit Hanina": "בית חנינה",
+    "Beit Iksa": "בית עכסה",
+    "Qatanna": "קטנה",
+    "Biddu": "בידו",
+    "Beit Surik": "בית סוריק",
+    "Al-Qubeiba": "אל-קובייבה",
+    "Beit Duqqu": "בית דוקו",
+    "An-Nabi Samwil": "א-נבי סמואיל",
+    "Rafat": "רפאת",
+    "Beit Ijza": "בית עג'זה",
+    "Al-Judeira": "אל-ג'דיירה",
+    "Qalandiya": "קלנדיה",
+    "Ar-Ram": "א-ראם",
+    "Kafr Aqab": "כפר עקב"
+  }
+}
