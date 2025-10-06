@@ -196,14 +196,13 @@ class _CarDetailsPageState extends State<CarDetailsPage>
     );
   }
 
-  void _onModelChanged(String? model) {
-    setState(() {
-      selectedModel = model;
-    });
-    if (model != null) {
-      _loadYears();
-    }
-  }
+void _onModelChanged(String? model) {
+  setState(() {
+    selectedModel = model;
+  });
+  if (model != null) _loadYears();
+}
+
 
   void _onYearChanged(String? year) {
     setState(() {
@@ -526,50 +525,40 @@ class _CarDetailsPageState extends State<CarDetailsPage>
     );
   }
 
-  Widget _buildAnimatedSelector({
-    required String title,
-    required String? value,
-    required List<CarDetailOption> items,
-    required bool isLoading,
-    required void Function(String?) onChanged,
-    required bool isDark,
-    bool enabled = true,
-    int delay = 0,
-  }) {
-    return TweenAnimationBuilder<double>(
-      duration: Duration(milliseconds: 600 + delay),
-      tween: Tween(begin: 0.0, end: 1.0),
-      curve: Curves.easeOutBack,
-      builder: (context, value, child) {
-        return Transform.translate(
-          offset: Offset(0, 20 * (1 - value)),
-          child: Opacity(
-            opacity: value.clamp(0.0, 1.0),
-            child: _buildSelector(
-              title: title,
-              value:
-                  this.selectedModel == null &&
-                      title.toLowerCase().contains('year')
-                  ? null
-                  : this.selectedYear == null &&
-                        title.toLowerCase().contains('engine')
-                  ? null
-                  : title.toLowerCase().contains('model')
-                  ? selectedModel
-                  : title.toLowerCase().contains('year')
-                  ? selectedYear
-                  : selectedEngine,
-              items: items,
-              isLoading: isLoading,
-              onChanged: onChanged,
-              isDark: isDark,
-              enabled: enabled,
-            ),
+Widget _buildAnimatedSelector({
+  required String title,
+  required String? value,
+  required List<CarDetailOption> items,
+  required bool isLoading,
+  required void Function(String?) onChanged,
+  required bool isDark,
+  bool enabled = true,
+  int delay = 0,
+}) {
+  return TweenAnimationBuilder<double>(
+    duration: Duration(milliseconds: 600 + delay),
+    tween: Tween(begin: 0.0, end: 1.0),
+    curve: Curves.easeOutBack,
+    builder: (context, animValue, child) {
+      return Transform.translate(
+        offset: Offset(0, 20 * (1 - animValue)),
+        child: Opacity(
+          opacity: animValue.clamp(0.0, 1.0),
+          child: _buildSelector(
+            title: title,
+            value: value, // ✅ هذا التعديل المهم
+            items: items,
+            isLoading: isLoading,
+            onChanged: onChanged,
+            isDark: isDark,
+            enabled: enabled,
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
+
 
   Widget _buildSelector({
     required String title,
