@@ -15,15 +15,29 @@ import 'core/services/cart_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables
-  await dotenv.load(fileName: ".env");
+  // Load environment variables with error handling
+  try {
+    await dotenv.load(fileName: ".env");
+    print("✅ Environment variables loaded successfully");
+  } catch (e) {
+    print("⚠️ Warning: Could not load .env file: $e");
+    print("🔧 Using fallback configuration...");
+  }
 
-  // Get environment variables
+  // Get environment variables from .env file only
   final supabaseUrl = dotenv.env['SUPABASE_URL'];
   final supabaseKey = dotenv.env['SUPABASE_ANON_KEY'];
 
+  print("🌐 Supabase URL: ${supabaseUrl ?? 'Not set'}");
+  print(
+    "🔑 Supabase Key: ${supabaseKey != null ? '${supabaseKey.substring(0, 20)}...' : 'Not set'}",
+  );
+
   // Validate required environment variables
-  if (supabaseUrl == null || supabaseKey == null) {
+  if (supabaseUrl == null ||
+      supabaseKey == null ||
+      supabaseUrl.isEmpty ||
+      supabaseKey.isEmpty) {
     throw Exception(
       'Missing required environment variables. Please check your .env file.',
     );

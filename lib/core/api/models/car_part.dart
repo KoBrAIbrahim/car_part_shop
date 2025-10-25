@@ -231,6 +231,10 @@ class CarPart {
     return _extractCategoryFromPartNumber();
   }
 
+  String? get displaySubcategory {
+    return shopifyProduct?.subcategories;
+  }
+
   // Helper method to generate description from part number
   String _generateDescriptionFromPartNumber() {
     final parts = partNumber.split('-');

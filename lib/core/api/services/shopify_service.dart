@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ShopifyService {
-  // Shopify store credentials from environment variables
+  // Shopify store credentials from environment variables only
   static String get _shopDomain => dotenv.env['SHOPIFY_STORE_DOMAIN'] ?? '';
   static String get _adminApiAccessToken =>
       dotenv.env['SHOPIFY_ADMIN_API_ACCESS_TOKEN'] ?? '';
@@ -241,6 +241,7 @@ class ShopifyProduct {
   final String? garagePrice;
   final String? metafieldProductType;
   final String? metafieldPartNumber;
+  final String? subcategories;
 
   ShopifyProduct({
     required this.id,
@@ -263,6 +264,7 @@ class ShopifyProduct {
     this.garagePrice,
     this.metafieldProductType,
     this.metafieldPartNumber,
+    this.subcategories,
   });
 
   factory ShopifyProduct.fromAdminApiJson(
@@ -295,6 +297,7 @@ class ShopifyProduct {
     final garagePrice = metafields['garage_price']?.toString();
     final metafieldProductType = metafields['product_type']?.toString();
     final metafieldPartNumber = metafields['part_number']?.toString();
+    final subcategories = metafields['subcategories']?.toString();
 
     return ShopifyProduct(
       id: productJson['id']?.toString() ?? '',
@@ -322,6 +325,7 @@ class ShopifyProduct {
       garagePrice: garagePrice,
       metafieldProductType: metafieldProductType,
       metafieldPartNumber: metafieldPartNumber,
+      subcategories: subcategories,
     );
   }
 
@@ -444,6 +448,7 @@ class ShopifyProduct {
       'garagePrice': garagePrice,
       'metafieldProductType': metafieldProductType,
       'metafieldPartNumber': metafieldPartNumber,
+      'subcategories': subcategories,
     };
   }
 
@@ -486,6 +491,7 @@ class ShopifyProduct {
       'garagePrice': garagePrice,
       'metafieldProductType': metafieldProductType,
       'metafieldPartNumber': metafieldPartNumber,
+      'subcategories': subcategories,
     };
   }
 
@@ -512,6 +518,7 @@ class ShopifyProduct {
       garagePrice: json['garagePrice'],
       metafieldProductType: json['metafieldProductType'],
       metafieldPartNumber: json['metafieldPartNumber'],
+      subcategories: json['subcategories'],
     );
   }
 }

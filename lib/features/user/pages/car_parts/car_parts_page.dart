@@ -12,15 +12,22 @@ import '../../../../core/services/cache_service.dart';
 import '../../../../core/services/part_compatibility_service.dart';
 import '../../widgets/app_bottom_navigation_bar.dart';
 import '../../../auth/auth_provider.dart';
-import 'car_parts_filter_sheet.dart';
 import 'car_parts_header.dart';
 import 'car_parts_pagination.dart';
 
 class CarPartsPage extends StatefulWidget {
   final int carId;
   final String carName;
+  final String? initialCategory;
+  final String? initialSubcategory;
 
-  const CarPartsPage({super.key, required this.carId, required this.carName});
+  const CarPartsPage({
+    super.key,
+    required this.carId,
+    required this.carName,
+    this.initialCategory,
+    this.initialSubcategory,
+  });
 
   @override
   State<CarPartsPage> createState() => _CarPartsPageState();
@@ -32,6 +39,7 @@ class _CarPartsPageState extends State<CarPartsPage> {
 
   // Filter and sort state
   String _selectedCategory = 'All';
+  String? _selectedSubcategory;
   String _sortBy = 'name';
   bool _sortAscending = true;
   List<String> _availableCategories = ['All'];
@@ -40,6 +48,14 @@ class _CarPartsPageState extends State<CarPartsPage> {
   void initState() {
     super.initState();
     _partsProvider = Provider.of<CarPartsProvider>(context, listen: false);
+
+    // Set initial category and subcategory if provided
+    if (widget.initialCategory != null) {
+      _selectedCategory = widget.initialCategory!;
+    }
+    if (widget.initialSubcategory != null) {
+      _selectedSubcategory = widget.initialSubcategory;
+    }
 
     // Load parts when page opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -81,19 +97,20 @@ class _CarPartsPageState extends State<CarPartsPage> {
     }
   }
 
-  void _onSearchChanged(String query) {
-    Future.delayed(const Duration(milliseconds: 300), () {
-      if (_searchController.text == query) {
-        _partsProvider.searchParts(query);
-      }
-    });
-  }
-
   List<CarPart> _getFilteredAndSortedParts(List<CarPart> parts) {
     List<CarPart> filtered = parts;
+
+    // Filter by category
     if (_selectedCategory != 'All') {
-      filtered = parts
+      filtered = filtered
           .where((part) => part.displayCategory == _selectedCategory)
+          .toList();
+    }
+
+    // Filter by subcategory if selected
+    if (_selectedSubcategory != null && _selectedSubcategory!.isNotEmpty) {
+      filtered = filtered
+          .where((part) => part.displaySubcategory == _selectedSubcategory)
           .toList();
     }
 
@@ -133,27 +150,6 @@ class _CarPartsPageState extends State<CarPartsPage> {
     return part.price ?? 0.0;
   }
 
-  void _showFilterSortBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => CarPartsFilterSheet(
-        selectedCategory: _selectedCategory,
-        sortBy: _sortBy,
-        sortAscending: _sortAscending,
-        availableCategories: _availableCategories,
-        onApply: (category, sortBy, sortAscending) {
-          setState(() {
-            _selectedCategory = category;
-            _sortBy = sortBy;
-            _sortAscending = sortAscending;
-          });
-        },
-      ),
-    );
-  }
-
   void _showCacheManagementDialog() {
     showDialog(
       context: context,
@@ -178,23 +174,17 @@ class _CarPartsPageState extends State<CarPartsPage> {
                     provider.parts,
                   );
                   final totalParts = filteredParts.length;
-                  final hasActiveFilters =
-                      _selectedCategory != 'All' ||
-                      provider.searchQuery.isNotEmpty;
 
                   return CarPartsHeader(
                     carName: widget.carName,
                     totalParts: totalParts,
                     isLoading: provider.isLoading && provider.parts.isEmpty,
-                    onFilterPressed: _showFilterSortBottomSheet,
-                    hasActiveFilters: hasActiveFilters,
+                    onFilterPressed: null, // Disabled filter button
+                    hasActiveFilters: false, // No filters
                     onCacheManagePressed: _showCacheManagementDialog,
                   );
                 },
               ),
-
-              // Search Bar
-              _buildSearchBar(isDark),
 
               // Parts Grid with Pagination
               Expanded(
@@ -228,57 +218,6 @@ class _CarPartsPageState extends State<CarPartsPage> {
           bottomNavigationBar: AppBottomNavigationBar(currentIndex: 0),
         );
       },
-    );
-  }
-
-  Widget _buildSearchBar(bool isDark) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.getCardBackground(isDark),
-        boxShadow: [
-          BoxShadow(
-            color: isDark
-                ? Colors.black.withOpacity(0.1)
-                : Colors.grey.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.getBackground(isDark),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.getDivider(isDark)),
-        ),
-        child: TextField(
-          controller: _searchController,
-          onChanged: _onSearchChanged,
-          decoration: InputDecoration(
-            hintText: tr('user.car_parts.search_hint'),
-            hintStyle: TextStyle(
-              color: AppColors.getTextColor(isDark).withOpacity(0.6),
-            ),
-            prefixIcon: Icon(Icons.search, color: AppColors.getPrimary(isDark)),
-            suffixIcon: _searchController.text.isNotEmpty
-                ? IconButton(
-                    icon: Icon(Icons.clear, color: AppColors.error),
-                    onPressed: () {
-                      _searchController.clear();
-                      _partsProvider.clearSearch();
-                    },
-                  )
-                : null,
-            border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-          ),
-          style: TextStyle(color: AppColors.getTextColor(isDark), fontSize: 16),
-        ),
-      ),
     );
   }
 

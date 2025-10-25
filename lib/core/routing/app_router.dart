@@ -11,7 +11,7 @@ import '../../features/user/pages/settings/profile_page.dart';
 import '../../features/user/pages/settings/about_page.dart';
 import '../../features/user/pages/settings/help_page.dart';
 import '../../features/user/pages/car_details/car_details_page.dart';
-import '../../features/user/pages/car_parts/car_parts_page.dart';
+import '../../features/products/presentation/pages/category_selection_page.dart';
 
 class AppRouter {
   static const String welcome = '/';
@@ -143,7 +143,7 @@ class AppRouter {
           final carIdStr = state.pathParameters['carId'] ?? '0';
           final carId = int.tryParse(carIdStr) ?? 0;
           final carName = state.uri.queryParameters['carName'] ?? '';
-          return CarPartsPage(carId: carId, carName: carName);
+          return CategorySelectionPage(carId: carId, carName: carName);
         },
       ),
     ],

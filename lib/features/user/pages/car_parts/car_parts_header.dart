@@ -8,7 +8,7 @@ class CarPartsHeader extends StatefulWidget {
   final String carName;
   final int totalParts;
   final bool isLoading;
-  final VoidCallback onFilterPressed;
+  final VoidCallback? onFilterPressed;
   final bool hasActiveFilters;
   final VoidCallback? onCacheManagePressed;
 
@@ -17,7 +17,7 @@ class CarPartsHeader extends StatefulWidget {
     required this.carName,
     required this.totalParts,
     this.isLoading = false,
-    required this.onFilterPressed,
+    this.onFilterPressed,
     this.hasActiveFilters = false,
     this.onCacheManagePressed,
   });
@@ -193,21 +193,22 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
           ),
         ),
 
-        // Compact Filter Button
-        _buildCompactButton(
-          onPressed: () {
-            setState(() => _isFilterPressed = true);
-            _scaleController.forward().then((_) {
-              _scaleController.reverse();
-              setState(() => _isFilterPressed = false);
-              widget.onFilterPressed();
-            });
-          },
-          icon: Icons.filter_alt_rounded,
-          isPressed: _isFilterPressed,
-          isDark: isDark,
-          showBadge: widget.hasActiveFilters,
-        ),
+        // Compact Filter Button (Hidden when null)
+        if (widget.onFilterPressed != null)
+          _buildCompactButton(
+            onPressed: () {
+              setState(() => _isFilterPressed = true);
+              _scaleController.forward().then((_) {
+                _scaleController.reverse();
+                setState(() => _isFilterPressed = false);
+                widget.onFilterPressed!();
+              });
+            },
+            icon: Icons.filter_alt_rounded,
+            isPressed: _isFilterPressed,
+            isDark: isDark,
+            showBadge: widget.hasActiveFilters,
+          ),
         /*
         // Cache Management Button
         if (widget.onCacheManagePressed != null) ...[
