@@ -106,10 +106,17 @@
   },
   "user": {
     "nav": {
-      "home": "الرئيسية",
+      "home": "مركز قطع الغيار",
       "tools": "الأدوات",
       "cart": "سلة التسوق",
       "sales": "العروض والخصومات",
+      "settings": "الإعدادات"
+    },
+    "bottom_nav": {
+      "home": "الرئيسية",
+      "tools": "الأدوات",
+      "sales": "العروض والخصومات",
+      "cart": "سلة التسوق",
       "settings": "الإعدادات"
     },
     "sales": {
@@ -140,9 +147,10 @@
       "model": "الموديل",
       "year": "السنة", 
       "engine": "المحرك",
-      "select_model": "اختر الموديل",
-      "select_year": "اختر السنة",
-      "select_engine": "اختر المحرك",
+  "select_model": "اختر الموديل",
+  "select_year": "اختر السنة",
+  "select_engine": "اختر المحرك",
+  "select": "اختر",
       "continue": "متابعة",
       "loading_models": "جاري تحميل الموديلات...",
       "loading_years": "جاري تحميل السنوات...",
@@ -168,6 +176,7 @@
       "descending": "تنازلي",
       "apply_filters": "تطبيق التصفية",
       "reset_filters": "إعادة تعيين",
+      "loading": "جاري تحميل القطع...",
       "loading_parts": "جاري تحميل القطع...",
       "parts_found": "قطعة موجودة",
       "sort_price_low_to_high": "السعر (من الأقل إلى الأعلى)",
@@ -180,7 +189,8 @@
       "error_loading_parts": "فشل في تحميل القطع",
       "part_details": "تفاصيل القطعة",
       "add_to_cart": "إضافة إلى السلة",
-      "out_of_stock": "غير متوفر",
+  "in_stock": "متوفر",
+  "out_of_stock": "غير متوفر",
       "quantity": "الكمية",
       "price": "السعر",
       "garage_price": "سعر الكراج",

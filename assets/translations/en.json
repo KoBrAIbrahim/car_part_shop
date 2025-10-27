@@ -108,10 +108,17 @@
   },
   "user": {
     "nav": {
-      "home": "Home",
+      "home": "Auto parts center",
       "tools": "Tools",
       "cart": "My Cart",
       "sales": "Sales & Offers",
+      "settings": "Settings"
+    },
+    "bottom_nav": {
+      "home": "Home",
+      "tools": "Tools",
+      "sales": "Sales",
+      "cart": "My Cart",
       "settings": "Settings"
     },
     "sales": {
@@ -161,9 +168,10 @@
       "model": "Model",
       "year": "Year", 
       "engine": "Engine",
-      "select_model": "Select Model",
-      "select_year": "Select Year",
-      "select_engine": "Select Engine",
+  "select_model": "Select Model",
+  "select_year": "Select Year",
+  "select_engine": "Select Engine",
+  "select": "Select",
       "continue": "Continue",
       "loading_models": "Loading models...",
       "loading_years": "Loading years...",
@@ -189,6 +197,7 @@
       "descending": "Descending",
       "apply_filters": "Apply Filters",
       "reset_filters": "Reset",
+      "loading": "Loading parts...",
       "loading_parts": "Loading parts...",
       "parts_found": "parts found",
       "sort_price_low_to_high": "Price (Low to High)",
@@ -201,7 +210,8 @@
       "error_loading_parts": "Failed to load parts",
       "part_details": "Part Details",
       "add_to_cart": "Add to Cart",
-      "out_of_stock": "Out of Stock",
+  "in_stock": "In Stock",
+  "out_of_stock": "Out of Stock",
       "quantity": "Quantity",
       "price": "Price",
       "garage_price": "Garage Price",

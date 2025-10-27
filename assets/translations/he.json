@@ -103,10 +103,17 @@
   },
   "user": {
     "nav": {
-      "home": "בית",
+      "home": "מרכז חלקי הרכב",
       "tools": "כלים",
       "cart": "עגלת קניות",
       "sales": "מבצעים והנחות",
+      "settings": "הגדרות"
+    },
+    "bottom_nav": {
+      "home": "דף הבית",
+      "tools": "כלים",
+      "sales": "מבצעים והנחות",
+      "cart": "עגלת קניות",
       "settings": "הגדרות"
     },
     "sales": {
@@ -137,9 +144,10 @@
       "model": "דגם",
       "year": "שנה", 
       "engine": "מנוע",
-      "select_model": "בחר דגם",
-      "select_year": "בחר שנה",
-      "select_engine": "בחר מנוע",
+  "select_model": "בחר דגם",
+  "select_year": "בחר שנה",
+  "select_engine": "בחר מנוע",
+  "select": "בחר",
       "continue": "המשך",
       "loading_models": "טוען דגמים...",
       "loading_years": "טוען שנים...",
@@ -165,6 +173,7 @@
       "descending": "יורד",
       "apply_filters": "החל סינונים",
       "reset_filters": "איפוס",
+      "loading": "טוען חלקים...",
       "loading_parts": "טוען חלקים...",
       "parts_found": "חלקים נמצאו",
       "sort_price_low_to_high": "מחיר (נמוך לגבוה)",
@@ -177,7 +186,8 @@
       "error_loading_parts": "שגיאה בטעינת חלקים",
       "part_details": "פרטי חלק",
       "add_to_cart": "הוסף לעגלה",
-      "out_of_stock": "אזל במלאי",
+    "in_stock": "במלאי",
+    "out_of_stock": "אזל במלאי",
       "quantity": "כמות",
       "price": "מחיר",
       "garage_price": "מחיר מוסך",
