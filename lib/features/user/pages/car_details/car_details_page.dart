@@ -49,7 +49,6 @@ class _CarDetailsPageState extends State<CarDetailsPage>
   @override
   void initState() {
     super.initState();
-
     // Initialize animation controllers
     _slideController = AnimationController(
       duration: const Duration(milliseconds: 800),
@@ -71,14 +70,12 @@ class _CarDetailsPageState extends State<CarDetailsPage>
     // Initialize animations
     _slideAnimation =
         Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
-          CurvedAnimation(parent: _slideController, curve: Curves.easeOutBack),
-        );
-
+      CurvedAnimation(parent: _slideController, curve: Curves.easeOutBack),
+    );
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
-
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
     );
@@ -196,13 +193,12 @@ class _CarDetailsPageState extends State<CarDetailsPage>
     );
   }
 
-void _onModelChanged(String? model) {
-  setState(() {
-    selectedModel = model;
-  });
-  if (model != null) _loadYears();
-}
-
+  void _onModelChanged(String? model) {
+    setState(() {
+      selectedModel = model;
+    });
+    if (model != null) _loadYears();
+  }
 
   void _onYearChanged(String? year) {
     setState(() {
@@ -224,9 +220,12 @@ void _onModelChanged(String? model) {
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
         final isDark = themeProvider.isDarkMode;
+        final bgColor = AppColors.getBackground(isDark);
+        final textColor = AppColors.getTextColor(isDark);
+        final cardBg = AppColors.getCardBackground(isDark);
 
         return Scaffold(
-          backgroundColor: AppColors.getBackground(isDark),
+          backgroundColor: bgColor,
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
@@ -234,7 +233,7 @@ void _onModelChanged(String? model) {
             leading: Container(
               margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppColors.getCardBackground(isDark).withOpacity(0.9),
+                color: cardBg.withOpacity(0.95),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: AppColors.getDivider(isDark).withOpacity(0.3),
@@ -243,7 +242,7 @@ void _onModelChanged(String? model) {
               child: IconButton(
                 icon: Icon(
                   Icons.arrow_back,
-                  color: AppColors.getTextColor(isDark),
+                  color: textColor,
                 ),
                 onPressed: () => context.go('/home'),
               ),
@@ -251,7 +250,7 @@ void _onModelChanged(String? model) {
             title: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: AppColors.getCardBackground(isDark).withOpacity(0.9),
+                color: cardBg.withOpacity(0.95),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: AppColors.getDivider(isDark).withOpacity(0.3),
@@ -260,7 +259,7 @@ void _onModelChanged(String? model) {
               child: Text(
                 tr('user.car_details.title'),
                 style: TextStyle(
-                  color: AppColors.getTextColor(isDark),
+                  color: textColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -270,19 +269,12 @@ void _onModelChanged(String? model) {
           ),
           body: Stack(
             children: [
-              // Background gradient
+              // Background
               Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: isDark
-                        ? [AppColors.darkBackground, AppColors.darkSurface]
-                        : [AppColors.lightBackground, AppColors.lightSurface],
-                  ),
+                  color: bgColor,
                 ),
               ),
-
               // Main content
               SafeArea(
                 child: FadeTransition(
@@ -295,39 +287,34 @@ void _onModelChanged(String? model) {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 20),
-
-                          // Car logo and name section with enhanced design
+                          // Car logo and name section
                           ScaleTransition(
                             scale: _scaleAnimation,
                             child: _buildCarHeaderCard(isDark),
                           ),
-
                           const SizedBox(height: 32),
-
                           // Progress indicator
                           _buildProgressIndicator(isDark),
-
                           const SizedBox(height: 24),
-
-                          // Selection Title with animation
+                          // Selection Title
                           AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
                             child: Text(
                               tr('user.car_details.select_car_details'),
-                              style: Theme.of(context).textTheme.titleLarge
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
                                   ?.copyWith(
-                                    color: AppColors.getTextColor(isDark),
+                                    color: textColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 22,
                                   ),
                             ),
                           ),
-
                           const SizedBox(height: 20),
-
                           // Animated selectors
                           _buildAnimatedSelector(
-                            title: tr('user.car_details.model'),
+                            titleKey: 'user.car_details.model',
                             value: selectedModel,
                             items: models,
                             isLoading: isLoadingModels,
@@ -335,11 +322,9 @@ void _onModelChanged(String? model) {
                             isDark: isDark,
                             delay: 0,
                           ),
-
                           const SizedBox(height: 20),
-
                           _buildAnimatedSelector(
-                            title: tr('user.car_details.year'),
+                            titleKey: 'user.car_details.year',
                             value: selectedYear,
                             items: years,
                             isLoading: isLoadingYears,
@@ -348,11 +333,9 @@ void _onModelChanged(String? model) {
                             enabled: selectedModel != null,
                             delay: 200,
                           ),
-
                           const SizedBox(height: 20),
-
                           _buildAnimatedSelector(
-                            title: tr('user.car_details.engine'),
+                            titleKey: 'user.car_details.engine',
                             value: selectedEngine,
                             items: engines,
                             isLoading: isLoadingEngines,
@@ -361,12 +344,9 @@ void _onModelChanged(String? model) {
                             enabled: selectedYear != null,
                             delay: 400,
                           ),
-
                           const SizedBox(height: 40),
-
-                          // Enhanced Continue Button
+                          // Continue Button
                           _buildContinueButton(isDark),
-
                           const SizedBox(height: 20),
                         ],
                       ),
@@ -377,8 +357,7 @@ void _onModelChanged(String? model) {
             ],
           ),
           bottomNavigationBar: AppBottomNavigationBar(
-            currentIndex:
-                0, // Car details is not part of main tabs, so keep it at 0 (home)
+            currentIndex: 0,
           ),
         );
       },
@@ -386,54 +365,44 @@ void _onModelChanged(String? model) {
   }
 
   Widget _buildCarHeaderCard(bool isDark) {
+    final cardBg = AppColors.getCardBackground(isDark);
+    final textColor = AppColors.getTextColor(isDark);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [AppColors.darkCardBackground, AppColors.darkSurface]
-              : [AppColors.lightCardBackground, AppColors.lightSurface],
-        ),
+        color: cardBg,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: AppColors.getDivider(isDark).withOpacity(0.3),
         ),
         boxShadow: [
           BoxShadow(
-            color: isDark
-                ? Colors.black.withOpacity(0.3)
-                : AppColors.getPrimary(isDark).withOpacity(0.15),
+            color: Colors.black.withOpacity(isDark ? 0.3 : 0.1),
             blurRadius: 15,
             offset: const Offset(0, 5),
-            spreadRadius: 0,
           ),
         ],
       ),
       child: Column(
         children: [
-          // Enhanced Car Logo
+          // Car Logo
           Hero(
             tag: 'car_logo_${widget.carMake}',
             child: Container(
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Colors.white, Color(0xFFF8F9FA)],
-                ),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: AppColors.getDivider(isDark).withOpacity(0.5),
+                  color: AppColors.yellow.withOpacity(0.3),
                   width: 2,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.getPrimary(isDark).withOpacity(0.2),
+                    color: AppColors.yellow.withOpacity(0.2),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -448,13 +417,13 @@ void _onModelChanged(String? model) {
                     child: CircularProgressIndicator(
                       strokeWidth: 3,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                        AppColors.getPrimary(isDark),
+                        AppColors.yellow,
                       ),
                     ),
                   ),
                   errorWidget: (context, url, error) => Icon(
                     Icons.car_repair_rounded,
-                    color: AppColors.getPrimary(isDark),
+                    color: AppColors.yellow,
                     size: 40,
                   ),
                 ),
@@ -462,22 +431,14 @@ void _onModelChanged(String? model) {
             ),
           ),
           const SizedBox(height: 16),
-
-          // Car make name with gradient text effect
-          ShaderMask(
-            shaderCallback: (bounds) => LinearGradient(
-              colors: isDark
-                  ? [AppColors.darkTextLight, AppColors.accent]
-                  : [AppColors.lightTextDark, AppColors.accent],
-            ).createShader(bounds),
-            child: Text(
-              widget.carMake,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
-            ),
+          // Car make name
+          Text(
+            widget.carMake,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
           ),
         ],
       ),
@@ -490,10 +451,13 @@ void _onModelChanged(String? model) {
     if (selectedYear != null) completedSteps++;
     if (selectedEngine != null) completedSteps++;
 
+    final cardBg = AppColors.getCardBackground(isDark);
+    final textColor = AppColors.getTextColor(isDark);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.getCardBackground(isDark).withOpacity(0.8),
+        color: cardBg,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: AppColors.getDivider(isDark).withOpacity(0.3),
@@ -504,7 +468,7 @@ void _onModelChanged(String? model) {
           Text(
             'Progress: $completedSteps/3',
             style: TextStyle(
-              color: AppColors.getTextColor(isDark),
+              color: textColor,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -515,7 +479,7 @@ void _onModelChanged(String? model) {
               value: completedSteps / 3,
               backgroundColor: AppColors.getDivider(isDark),
               valueColor: AlwaysStoppedAnimation<Color>(
-                AppColors.getPrimary(isDark),
+                AppColors.yellow,
               ),
               minHeight: 6,
             ),
@@ -525,43 +489,42 @@ void _onModelChanged(String? model) {
     );
   }
 
-Widget _buildAnimatedSelector({
-  required String title,
-  required String? value,
-  required List<CarDetailOption> items,
-  required bool isLoading,
-  required void Function(String?) onChanged,
-  required bool isDark,
-  bool enabled = true,
-  int delay = 0,
-}) {
-  return TweenAnimationBuilder<double>(
-    duration: Duration(milliseconds: 600 + delay),
-    tween: Tween(begin: 0.0, end: 1.0),
-    curve: Curves.easeOutBack,
-    builder: (context, animValue, child) {
-      return Transform.translate(
-        offset: Offset(0, 20 * (1 - animValue)),
-        child: Opacity(
-          opacity: animValue.clamp(0.0, 1.0),
-          child: _buildSelector(
-            title: title,
-            value: value, // ✅ هذا التعديل المهم
-            items: items,
-            isLoading: isLoading,
-            onChanged: onChanged,
-            isDark: isDark,
-            enabled: enabled,
+  Widget _buildAnimatedSelector({
+    required String titleKey,
+    required String? value,
+    required List<CarDetailOption> items,
+    required bool isLoading,
+    required void Function(String?) onChanged,
+    required bool isDark,
+    bool enabled = true,
+    int delay = 0,
+  }) {
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: 600 + delay),
+      tween: Tween(begin: 0.0, end: 1.0),
+      curve: Curves.easeOutBack,
+      builder: (context, animValue, child) {
+        return Transform.translate(
+          offset: Offset(0, 20 * (1 - animValue)),
+          child: Opacity(
+            opacity: animValue.clamp(0.0, 1.0),
+            child: _buildSelector(
+              titleKey: titleKey,
+              value: value,
+              items: items,
+              isLoading: isLoading,
+              onChanged: onChanged,
+              isDark: isDark,
+              enabled: enabled,
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 
   Widget _buildSelector({
-    required String title,
+    required String titleKey,
     required String? value,
     required List<CarDetailOption> items,
     required bool isLoading,
@@ -569,6 +532,10 @@ Widget _buildAnimatedSelector({
     required bool isDark,
     bool enabled = true,
   }) {
+    final textColor = AppColors.getTextColor(isDark);
+    final cardBg = AppColors.getCardBackground(isDark);
+    final title = tr(titleKey);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -577,7 +544,7 @@ Widget _buildAnimatedSelector({
           child: Text(
             title,
             style: TextStyle(
-              color: AppColors.getTextColor(isDark),
+              color: textColor,
               fontSize: 16,
               fontWeight: FontWeight.w600,
             ),
@@ -588,21 +555,7 @@ Widget _buildAnimatedSelector({
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
-            gradient: enabled
-                ? LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: isDark
-                        ? [AppColors.darkCardBackground, AppColors.darkSurface]
-                        : [
-                            AppColors.lightCardBackground,
-                            AppColors.lightSurface,
-                          ],
-                  )
-                : null,
-            color: enabled
-                ? null
-                : AppColors.getCardBackground(isDark).withOpacity(0.5),
+            color: enabled ? cardBg : cardBg.withOpacity(0.5),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: enabled
@@ -613,7 +566,7 @@ Widget _buildAnimatedSelector({
             boxShadow: enabled
                 ? [
                     BoxShadow(
-                      color: AppColors.getPrimary(isDark).withOpacity(0.1),
+                      color: AppColors.yellow.withOpacity(0.1),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -633,7 +586,7 @@ Widget _buildAnimatedSelector({
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              AppColors.getPrimary(isDark),
+                              AppColors.yellow,
                             ),
                           ),
                         ),
@@ -641,9 +594,7 @@ Widget _buildAnimatedSelector({
                         Text(
                           'Loading...',
                           style: TextStyle(
-                            color: AppColors.getTextColor(
-                              isDark,
-                            ).withOpacity(0.7),
+                            color: textColor.withOpacity(0.7),
                           ),
                         ),
                       ],
@@ -655,17 +606,17 @@ Widget _buildAnimatedSelector({
                   isExpanded: true,
                   underline: const SizedBox(),
                   hint: Text(
-                    _getSelectHintText(title),
+                    _getSelectHintText(titleKey),
                     style: TextStyle(
-                      color: AppColors.getTextColor(isDark).withOpacity(0.6),
+                      color: textColor.withOpacity(0.6),
                     ),
                   ),
-                  style: TextStyle(color: AppColors.getTextColor(isDark)),
-                  dropdownColor: AppColors.getCardBackground(isDark),
+                  style: TextStyle(color: textColor),
+                  dropdownColor: cardBg,
                   onChanged: enabled ? onChanged : null,
                   icon: Icon(
                     Icons.keyboard_arrow_down_rounded,
-                    color: AppColors.getTextColor(isDark).withOpacity(0.7),
+                    color: textColor.withOpacity(0.7),
                   ),
                   items: items.map((option) {
                     return DropdownMenuItem<String>(
@@ -676,10 +627,8 @@ Widget _buildAnimatedSelector({
                           option.value,
                           style: TextStyle(
                             color: option.isAvailable
-                                ? AppColors.getTextColor(isDark)
-                                : AppColors.getTextColor(
-                                    isDark,
-                                  ).withOpacity(0.5),
+                                ? textColor
+                                : textColor.withOpacity(0.5),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -710,17 +659,11 @@ Widget _buildAnimatedSelector({
                   scale: value,
                   child: Container(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: isDark
-                            ? [AppColors.darkPrimary, AppColors.secondary]
-                            : [AppColors.lightPrimary, AppColors.secondary],
-                      ),
+                      color: AppColors.yellow,
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.getPrimary(isDark).withOpacity(0.3),
+                          color: AppColors.yellow.withOpacity(0.3),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
@@ -739,7 +682,6 @@ Widget _buildAnimatedSelector({
                           if (carId != null) {
                             final carName =
                                 '${widget.carMake} $selectedModel $selectedYear $selectedEngine';
-
                             if (mounted) {
                               context.push(
                                 '/car-parts/$carId?carName=${Uri.encodeComponent(carName)}',
@@ -763,7 +705,7 @@ Widget _buildAnimatedSelector({
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.transparent,
-                        foregroundColor: isDark ? Colors.white : Colors.black,
+                        foregroundColor: Colors.black,
                         shadowColor: Colors.transparent,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -793,17 +735,16 @@ Widget _buildAnimatedSelector({
     );
   }
 
-  String _getSelectHintText(String title) {
-    final titleLower = title.toLowerCase();
-    switch (titleLower) {
-      case 'model':
+  String _getSelectHintText(String titleKey) {
+    switch (titleKey) {
+      case 'user.car_details.model':
         return tr('user.car_details.select_model');
-      case 'year':
+      case 'user.car_details.year':
         return tr('user.car_details.select_year');
-      case 'engine':
+      case 'user.car_details.engine':
         return tr('user.car_details.select_engine');
       default:
-        return 'Select $title';
+        return '${tr('user.car_details.select')} ${tr(titleKey)}';
     }
   }
 }

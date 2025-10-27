@@ -19,6 +19,8 @@ class CarPartsService {
     int pageSize = _pageSize,
     bool enrichWithShopify = true,
     bool forceRefresh = false,
+    String? category,
+    String? subcategory,
   }) async {
     try {
       print(
@@ -43,14 +45,20 @@ class CarPartsService {
       final offset = page * pageSize;
 
       // First, get the list of part numbers from Supabase for this car
-      final data = await _supabaseService.client
+      // Apply category/subcategory filters server-side if provided
+      var query = _supabaseService.client
           .from('parts')
-          .select(
-            'part_number, id_cars',
-          ) // Only get essential fields from Supabase
-          .eq('id_cars', carId)
-          .range(offset, offset + pageSize - 1)
-          .order('part_number');
+          .select('part_number, id_cars')
+          .eq('id_cars', carId);
+
+      if (category != null && category.isNotEmpty) {
+        query = query.eq('category', category);
+      }
+      if (subcategory != null && subcategory.isNotEmpty) {
+        query = query.eq('subcategory', subcategory);
+      }
+
+      final data = await query.range(offset, offset + pageSize - 1).order('part_number');
 
       print('📦 [PARTS] Found ${data.length} part numbers in Supabase');
 
@@ -69,7 +77,7 @@ class CarPartsService {
 
       // Get detailed data from Shopify (priority source)
       if (_enableShopifyEnrichment && ShopifyService.isConfigured) {
-        print('� [SHOPIFY] Fetching detailed product data from Shopify...');
+        print('🛒 [SHOPIFY] Fetching detailed product data from Shopify...');
 
         final shopifyProducts = await ShopifyService.getProductsByPartNumbers(
           partNumbers,
@@ -95,6 +103,19 @@ class CarPartsService {
                   .eq('part_number', partNumber)
                   .eq('id_cars', carId)
                   .single();
+
+              // If category/subcategory filters are present ensure fallback matches them
+              if (category != null && category.isNotEmpty) {
+                if (supabaseData['category'] != category) {
+                  // Skip this fallback as it doesn't match filters
+                  continue;
+                }
+              }
+              if (subcategory != null && subcategory.isNotEmpty) {
+                if (supabaseData['subcategory'] != subcategory) {
+                  continue;
+                }
+              }
 
               final carPart = CarPart.fromJson(supabaseData);
               parts.add(carPart);
@@ -155,16 +176,22 @@ class CarPartsService {
   }
 
   /// Get total count of parts for a car (for pagination)
-  static Future<int> getTotalPartsCount(int carId) async {
+  static Future<int> getTotalPartsCount(int carId,
+      {String? category, String? subcategory}) async {
     try {
       print('🔢 [PARTS] Getting total count for car ID: $carId');
 
-      final response = await _supabaseService.client
-          .from('parts')
-          .select('*')
-          .eq('id_cars', carId);
+      var query = _supabaseService.client.from('parts').select('*').eq('id_cars', carId);
+      if (category != null && category.isNotEmpty) {
+        query = query.eq('category', category);
+      }
+      if (subcategory != null && subcategory.isNotEmpty) {
+        query = query.eq('subcategory', subcategory);
+      }
 
-      final count = response.length;
+      final response = await query;
+
+      final count = (response as List).length;
       print('📊 [PARTS] Total parts count: $count');
       return count;
     } catch (e) {

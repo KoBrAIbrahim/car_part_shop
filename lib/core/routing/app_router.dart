@@ -12,6 +12,8 @@ import '../../features/user/pages/settings/about_page.dart';
 import '../../features/user/pages/settings/help_page.dart';
 import '../../features/user/pages/car_details/car_details_page.dart';
 import '../../features/products/presentation/pages/category_selection_page.dart';
+import '../../features/user/pages/car_parts/part_details_page.dart';
+import '../api/models/car_part.dart';
 
 class AppRouter {
   static const String welcome = '/';
@@ -31,6 +33,7 @@ class AppRouter {
   static const String help = '/help';
   static const String carDetails = '/car-details/:carMake';
   static const String carParts = '/car-parts/:carId';
+  static const String partDetails = '/part-details';
 
   static final GoRouter router = GoRouter(
     routes: [
@@ -144,6 +147,22 @@ class AppRouter {
           final carId = int.tryParse(carIdStr) ?? 0;
           final carName = state.uri.queryParameters['carName'] ?? '';
           return CategorySelectionPage(carId: carId, carName: carName);
+        },
+      ),
+      GoRoute(
+        path: partDetails,
+        builder: (BuildContext context, GoRouterState state) {
+          // We expect the CarPart instance to be passed via state.extra
+          final extra = state.extra;
+          if (extra is CarPart) {
+            return PartDetailsPage(part: extra);
+          }
+
+          // Fallback UI when the part was not passed correctly
+          return Scaffold(
+            appBar: AppBar(title: const Text('Part Details')),
+            body: const Center(child: Text('Part not found')),
+          );
         },
       ),
     ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'dart:async';
 import '../api/models/car_part.dart';
 import '../api/services/car_parts_service.dart';
@@ -12,9 +13,12 @@ class CarPartsProvider extends ChangeNotifier {
   int _totalPages = 0;
   int _totalPartsCount = 0;
   int? _carId;
+  String? _category;
+  String? _subcategory;
   String _searchQuery = '';
   Timer? _refreshTimer;
   DateTime? _lastRefreshTime;
+  bool _disposed = false;
 
   // Pagination constants
   static const int _pageSize = 10;
@@ -39,15 +43,19 @@ class CarPartsProvider extends ChangeNotifier {
   bool get canGoToPreviousPage => _currentPage > 0;
 
   /// Load parts for a specific car with server-side pagination
-  Future<void> loadPartsForCar(int carId, {bool forceRefresh = false}) async {
+  Future<void> loadPartsForCar(int carId,
+      {bool forceRefresh = false, String? category, String? subcategory}) async {
     if (_isLoading) return;
 
     _isLoading = true;
     _error = null;
-    _carId = carId;
+  _carId = carId;
+  // Only set filters if explicitly provided to avoid clearing them on refresh
+  if (category != null) _category = category;
+  if (subcategory != null) _subcategory = subcategory;
     _currentPage = 0;
-    _parts.clear();
-    notifyListeners();
+  _parts.clear();
+  _safeNotifyListeners();
 
     try {
       print(
@@ -55,7 +63,11 @@ class CarPartsProvider extends ChangeNotifier {
       );
 
       // Get total count first
-      _totalPartsCount = await CarPartsService.getTotalPartsCount(carId);
+      _totalPartsCount = await CarPartsService.getTotalPartsCount(
+        carId,
+        category: _category,
+        subcategory: _subcategory,
+      );
       _totalPages = (_totalPartsCount / _pageSize).ceil();
       if (_totalPages == 0) _totalPages = 1;
 
@@ -65,6 +77,8 @@ class CarPartsProvider extends ChangeNotifier {
         page: _currentPage,
         pageSize: _pageSize,
         forceRefresh: forceRefresh,
+        category: _category,
+        subcategory: _subcategory,
       );
 
       print(
@@ -77,38 +91,46 @@ class CarPartsProvider extends ChangeNotifier {
     } catch (e) {
       print('❌ [PARTS_PROVIDER] Error loading parts: $e');
       _error = e.toString();
-    } finally {
+      } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
   /// Go to next page with server-side loading
   Future<void> goToNextPage() async {
+    // Lazy-loading: fetch next page and append results to existing list
     if (!canGoToNextPage || _isLoading || _carId == null) return;
 
-    _isLoading = true;
-    _currentPage++;
-    notifyListeners();
+  _isLoading = true;
+  _currentPage++;
+  _safeNotifyListeners();
 
     try {
+      List<CarPart> newParts;
+
       if (_searchQuery.isNotEmpty) {
-        _parts = await CarPartsService.searchCarParts(
+        newParts = await CarPartsService.searchCarParts(
           carId: _carId!,
           searchQuery: _searchQuery,
           page: _currentPage,
           pageSize: _pageSize,
         );
       } else {
-        _parts = await CarPartsService.fetchCarParts(
+        newParts = await CarPartsService.fetchCarParts(
           carId: _carId!,
           page: _currentPage,
           pageSize: _pageSize,
+          category: _category,
+          subcategory: _subcategory,
         );
       }
 
+      // Append new items instead of replacing the list (infinite scroll)
+      _parts.addAll(newParts);
+
       print(
-        '📄 [PARTS_PROVIDER] Moved to page ${_currentPage + 1}/$_totalPages',
+        '📄 [PARTS_PROVIDER] Appended page ${_currentPage + 1}/$_totalPages with ${newParts.length} parts',
       );
     } catch (e) {
       print('❌ [PARTS_PROVIDER] Error loading next page: $e');
@@ -116,7 +138,7 @@ class CarPartsProvider extends ChangeNotifier {
       _currentPage--; // Revert page change on error
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
@@ -124,9 +146,9 @@ class CarPartsProvider extends ChangeNotifier {
   Future<void> goToPreviousPage() async {
     if (!canGoToPreviousPage || _isLoading || _carId == null) return;
 
-    _isLoading = true;
-    _currentPage--;
-    notifyListeners();
+  _isLoading = true;
+  _currentPage--;
+  _safeNotifyListeners();
 
     try {
       if (_searchQuery.isNotEmpty) {
@@ -141,6 +163,8 @@ class CarPartsProvider extends ChangeNotifier {
           carId: _carId!,
           page: _currentPage,
           pageSize: _pageSize,
+          category: _category,
+          subcategory: _subcategory,
         );
       }
 
@@ -153,7 +177,7 @@ class CarPartsProvider extends ChangeNotifier {
       _currentPage++; // Revert page change on error
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
@@ -166,9 +190,9 @@ class CarPartsProvider extends ChangeNotifier {
       return;
 
     final oldPage = _currentPage;
-    _isLoading = true;
-    _currentPage = pageIndex;
-    notifyListeners();
+  _isLoading = true;
+  _currentPage = pageIndex;
+  _safeNotifyListeners();
 
     try {
       if (_searchQuery.isNotEmpty) {
@@ -195,7 +219,7 @@ class CarPartsProvider extends ChangeNotifier {
       _currentPage = oldPage; // Revert page change on error
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
@@ -203,10 +227,10 @@ class CarPartsProvider extends ChangeNotifier {
   Future<void> searchParts(String query) async {
     if (_isLoading || _carId == null) return;
 
-    _isLoading = true;
-    _searchQuery = query;
-    _currentPage = 0;
-    notifyListeners();
+  _isLoading = true;
+  _searchQuery = query;
+  _currentPage = 0;
+  _safeNotifyListeners();
 
     try {
       if (query.isEmpty) {
@@ -244,7 +268,7 @@ class CarPartsProvider extends ChangeNotifier {
       _error = e.toString();
     } finally {
       _isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners();
     }
   }
 
@@ -257,7 +281,7 @@ class CarPartsProvider extends ChangeNotifier {
 
     // Reload parts without search
     await loadPartsForCar(_carId!);
-    notifyListeners();
+    _safeNotifyListeners();
   }
 
   /// Refresh parts data
@@ -288,7 +312,7 @@ class CarPartsProvider extends ChangeNotifier {
     _searchQuery = '';
     _lastRefreshTime = null;
     _stopAutoRefreshTimer();
-    notifyListeners();
+    _safeNotifyListeners();
   }
 
   /// Start auto-refresh timer (refreshes every hour)
@@ -340,6 +364,38 @@ class CarPartsProvider extends ChangeNotifier {
     return await CacheService.getCacheStats();
   }
 
+  /// Safely notify listeners. If called during widget build, schedule
+  /// the notification for after the current frame to avoid the
+  /// "setState() or markNeedsBuild() called during build" exception.
+  void _safeNotifyListeners() {
+    if (_disposed) return;
+    try {
+      final binding = WidgetsBinding.instance;
+      final phase = binding.schedulerPhase;
+      // If we're currently in the middle of a frame's build, defer
+      // the notification to the next frame.
+      if (phase == SchedulerPhase.idle ||
+          phase == SchedulerPhase.postFrameCallbacks) {
+        if (!_disposed) notifyListeners();
+      } else {
+        binding.addPostFrameCallback((_) {
+          if (!_disposed) {
+            try {
+              notifyListeners();
+            } catch (_) {}
+          }
+        });
+      }
+    } catch (e) {
+      // Fallback to immediate notify if anything goes wrong
+      if (!_disposed) {
+        try {
+          notifyListeners();
+        } catch (_) {}
+      }
+    }
+  }
+
   /// Force a refresh (for testing)
   Future<void> forceRefresh() async {
     print('🔄 [PARTS_PROVIDER] Force refresh requested');
@@ -349,6 +405,7 @@ class CarPartsProvider extends ChangeNotifier {
   @override
   void dispose() {
     _stopAutoRefreshTimer();
+    _disposed = true;
     super.dispose();
   }
 }

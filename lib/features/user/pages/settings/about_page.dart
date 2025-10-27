@@ -65,52 +65,42 @@ class _AboutPageState extends State<AboutPage> {
               children: [
                 // App Logo and Name Section
                 _buildAppHeader(isDark),
-
                 const SizedBox(height: 24),
 
                 // App Description
                 _buildDescriptionSection(isDark),
-
                 const SizedBox(height: 24),
 
                 // Mission Section
                 _buildMissionSection(isDark),
-
                 const SizedBox(height: 24),
 
                 // Features Section
                 _buildFeaturesSection(isDark),
-
                 const SizedBox(height: 24),
 
                 // App Information Section
                 _buildAppInfoSection(isDark),
-
                 const SizedBox(height: 24),
 
                 // Contact Information
                 _buildContactSection(isDark),
-
                 const SizedBox(height: 24),
 
                 // Feedback Section
                 _buildFeedbackSection(context, isDark),
-
                 const SizedBox(height: 24),
 
                 // Legal Section
                 _buildLegalSection(isDark),
-
                 const SizedBox(height: 24),
 
                 // Acknowledgments
                 _buildAcknowledgmentsSection(isDark),
-
                 const SizedBox(height: 24),
 
                 // Copyright Footer
                 _buildCopyrightFooter(isDark),
-
                 const SizedBox(height: 20),
               ],
             ),
@@ -129,11 +119,11 @@ class _AboutPageState extends State<AboutPage> {
             width: 100,
             height: 100,
             decoration: BoxDecoration(
-              color: AppColors.primary,
+              color: AppColors.yellow,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.primary.withOpacity(0.3),
+                  color: AppColors.yellow.withOpacity(0.3),
                   blurRadius: 15,
                   offset: const Offset(0, 8),
                 ),
@@ -142,10 +132,9 @@ class _AboutPageState extends State<AboutPage> {
             child: const Icon(
               Icons.directions_car_rounded,
               size: 60,
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
-
           const SizedBox(height: 16),
 
           // App Name
@@ -158,22 +147,24 @@ class _AboutPageState extends State<AboutPage> {
             ),
             textAlign: TextAlign.center,
           ),
-
           const SizedBox(height: 8),
 
           // Version
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.accent.withOpacity(0.1),
+              color: AppColors.yellow.withOpacity(0.2),
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: AppColors.yellow.withOpacity(0.3),
+              ),
             ),
             child: Text(
               '${'about.version'.tr()} ${packageInfo?.version ?? '1.0.0'}',
               style: TextStyle(
-                color: AppColors.accent,
+                color: AppColors.yellow,
                 fontSize: 14,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -277,7 +268,7 @@ class _AboutPageState extends State<AboutPage> {
         color: AppColors.getCardBackground(isDark),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppColors.getTextColor(isDark).withOpacity(0.1),
+          color: AppColors.getDivider(isDark),
         ),
       ),
       child: Row(
@@ -286,10 +277,10 @@ class _AboutPageState extends State<AboutPage> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.yellow.withOpacity(0.2),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: AppColors.primary, size: 24),
+            child: Icon(icon, color: AppColors.yellow, size: 24),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -397,7 +388,7 @@ class _AboutPageState extends State<AboutPage> {
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.accent, size: 20),
+          Icon(icon, color: AppColors.yellow, size: 20),
           const SizedBox(width: 12),
           Text(
             '$label: ',
@@ -443,10 +434,9 @@ class _AboutPageState extends State<AboutPage> {
                 child: _buildActionButton(
                   'about.rate_app'.tr(),
                   Icons.star_rounded,
-                  AppColors.accent,
+                  AppColors.yellow,
                   isDark,
                   () {
-                    // Handle rate app action
                     _showRateAppDialog(context, isDark);
                   },
                 ),
@@ -456,10 +446,9 @@ class _AboutPageState extends State<AboutPage> {
                 child: _buildActionButton(
                   'about.send_feedback'.tr(),
                   Icons.feedback_rounded,
-                  AppColors.primary,
+                  AppColors.info,
                   isDark,
                   () {
-                    // Handle send feedback action
                     _showFeedbackDialog(context, isDark);
                   },
                 ),
@@ -513,7 +502,7 @@ class _AboutPageState extends State<AboutPage> {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.accent, size: 20),
+            Icon(icon, color: AppColors.yellow, size: 20),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
@@ -569,7 +558,7 @@ class _AboutPageState extends State<AboutPage> {
             children: [
               Icon(
                 Icons.flutter_dash,
-                color: AppColors.accent.withOpacity(0.7),
+                color: AppColors.yellow.withOpacity(0.7),
                 size: 16,
               ),
               const SizedBox(width: 8),
@@ -617,7 +606,7 @@ class _AboutPageState extends State<AboutPage> {
         color: AppColors.getCardBackground(isDark),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.getTextColor(isDark).withOpacity(0.1),
+          color: AppColors.getDivider(isDark),
         ),
       ),
       child: child,
@@ -657,13 +646,16 @@ class _AboutPageState extends State<AboutPage> {
     bool isDark,
     VoidCallback onPressed,
   ) {
+    // Determine text color based on background color
+    final foregroundColor = color == AppColors.yellow ? Colors.black : Colors.white;
+
     return ElevatedButton.icon(
       onPressed: onPressed,
       icon: Icon(icon, size: 18),
       label: Text(text),
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
-        foregroundColor: Colors.white,
+        foregroundColor: foregroundColor,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 2,
@@ -701,14 +693,17 @@ class _AboutPageState extends State<AboutPage> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.accent.withOpacity(0.1),
+                  color: AppColors.yellow.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: AppColors.yellow.withOpacity(0.3),
+                  ),
                 ),
                 child: Text(
                   'support@carpartsshop.com',
                   style: TextStyle(
-                    color: AppColors.accent,
-                    fontWeight: FontWeight.w500,
+                    color: AppColors.yellow,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -717,7 +712,7 @@ class _AboutPageState extends State<AboutPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Close', style: TextStyle(color: AppColors.primary)),
+              child: Text('Close', style: TextStyle(color: AppColors.yellow)),
             ),
           ],
         );
@@ -756,8 +751,7 @@ class _AboutPageState extends State<AboutPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: List.generate(
                   5,
-                  (index) =>
-                      Icon(Icons.star, color: AppColors.accent, size: 32),
+                  (index) => Icon(Icons.star, color: AppColors.yellow, size: 32),
                 ),
               ),
             ],
@@ -765,7 +759,7 @@ class _AboutPageState extends State<AboutPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Close', style: TextStyle(color: AppColors.primary)),
+              child: Text('Close', style: TextStyle(color: AppColors.yellow)),
             ),
           ],
         );
@@ -813,7 +807,7 @@ class _AboutPageState extends State<AboutPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Close', style: TextStyle(color: AppColors.primary)),
+              child: Text('Close', style: TextStyle(color: AppColors.yellow)),
             ),
           ],
         );
@@ -861,7 +855,7 @@ class _AboutPageState extends State<AboutPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Close', style: TextStyle(color: AppColors.primary)),
+              child: Text('Close', style: TextStyle(color: AppColors.yellow)),
             ),
           ],
         );
@@ -910,7 +904,7 @@ class _AboutPageState extends State<AboutPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Close', style: TextStyle(color: AppColors.primary)),
+              child: Text('Close', style: TextStyle(color: AppColors.yellow)),
             ),
           ],
         );

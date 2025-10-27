@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/providers/theme_provider.dart';
@@ -9,8 +10,10 @@ class CarPartsHeader extends StatefulWidget {
   final int totalParts;
   final bool isLoading;
   final VoidCallback? onFilterPressed;
+  final VoidCallback? onSearchPressed;
   final bool hasActiveFilters;
   final VoidCallback? onCacheManagePressed;
+  final bool showActions;
 
   const CarPartsHeader({
     super.key,
@@ -18,8 +21,10 @@ class CarPartsHeader extends StatefulWidget {
     required this.totalParts,
     this.isLoading = false,
     this.onFilterPressed,
+    this.onSearchPressed,
     this.hasActiveFilters = false,
     this.onCacheManagePressed,
+    this.showActions = true,
   });
 
   @override
@@ -65,8 +70,8 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
     // Initialize animations
     _slideAnimation =
         Tween<Offset>(begin: const Offset(0, -0.5), end: Offset.zero).animate(
-          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
-        );
+      CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+    );
 
     _fadeAnimation = Tween<double>(
       begin: 0.0,
@@ -104,57 +109,102 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
           opacity: _fadeAnimation,
           child: SlideTransition(
             position: _slideAnimation,
-            child: _buildHeader(isDark),
+            child: _buildHeader(isDark, context),
           ),
         );
       },
     );
   }
+  Widget _buildHeader(bool isDark, BuildContext context) {
+    // Reuse the same visual contract as AppHeaderWidget: logo on the left,
+    // centered title, and action icons on the right.
+    final headerBg = isDark ? AppColors.darkCardBackground : Colors.white;
 
-  Widget _buildHeader(bool isDark) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 600;
+    final isTablet = screenWidth >= 600 && screenWidth < 1200;
+    final isDesktop = screenWidth >= 1200;
+
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [
-                  AppColors.darkPrimary,
-                  AppColors.darkPrimary.withOpacity(0.9),
-                  AppColors.secondary,
-                ]
-              : [
-                  AppColors.lightPrimary,
-                  AppColors.lightPrimary.withOpacity(0.95),
-                  AppColors.secondary,
-                ],
-          stops: const [0.0, 0.6, 1.0],
-        ),
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
+        color: headerBg,
         boxShadow: [
           BoxShadow(
-            color: isDark
-                ? Colors.black.withOpacity(0.3)
-                : AppColors.getPrimary(isDark).withOpacity(0.2),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(isDark ? 0.3 : 0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: SafeArea(
-        bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+          padding: EdgeInsets.symmetric(
+            horizontal: isDesktop ? 28 : (isTablet ? 20 : 12),
+            vertical: isSmallScreen ? 6 : 8,
+          ),
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              // Compact Header Row
-              _buildCompactHeaderRow(isDark),
-              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Logo on the left
+                  Image.asset(
+                    'assets/logo1.png',
+                    width: isDesktop ? 64 : (isTablet ? 56 : 48),
+                    height: isDesktop ? 64 : (isTablet ? 56 : 48),
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        Icons.directions_car_rounded,
+                        size: isDesktop ? 64 : (isTablet ? 56 : 48),
+                        color: AppColors.yellow,
+                      );
+                    },
+                  ),
 
-              // Inline Car Info
-              _buildInlineCarInfo(isDark),
+                  // Actions on the right: search, filter, cache/manage (optional)
+                  if (widget.showActions)
+                    Row(
+                      children: [
+                        // Search icon — call parent callback to open inline search
+                        IconButton(
+                          onPressed: widget.onSearchPressed ?? () => context.go('/home'),
+                          icon: Icon(Icons.search_rounded,
+                              color: AppColors.getTextColor(isDark)),
+                          tooltip: 'Search',
+                        ),
+
+                        if (widget.onCacheManagePressed != null)
+                          IconButton(
+                            onPressed: widget.onCacheManagePressed,
+                            icon: Icon(Icons.storage_rounded,
+                                color: AppColors.getTextColor(isDark)),
+                            tooltip: 'Cache',
+                          ),
+                      ],
+                    ),
+                ],
+              ),
+
+              // Centered title
+              Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: screenWidth * 0.6),
+                  child: Text(
+                    'user.car_parts.title'.tr(),
+                    style: TextStyle(
+                      color: AppColors.getTextColor(isDark),
+                      fontWeight: FontWeight.bold,
+                      fontSize: isDesktop ? 24 : (isTablet ? 22 : 20),
+                      letterSpacing: 0.5,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -178,21 +228,18 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
           isPressed: _isBackPressed,
           isDark: isDark,
         ),
-
         const SizedBox(width: 12),
-
         // Compact Title
         Expanded(
           child: Text(
             'user.car_parts.title'.tr(),
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
           ),
         ),
-
         // Compact Filter Button (Hidden when null)
         if (widget.onFilterPressed != null)
           _buildCompactButton(
@@ -209,25 +256,6 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
             isDark: isDark,
             showBadge: widget.hasActiveFilters,
           ),
-        /*
-        // Cache Management Button
-        if (widget.onCacheManagePressed != null) ...[
-          const SizedBox(width: 8),
-          _buildCompactButton(
-            onPressed: () {
-              setState(() => _isCachePressed = true);
-              _scaleController.forward().then((_) {
-                _scaleController.reverse();
-                setState(() => _isCachePressed = false);
-                widget.onCacheManagePressed!();
-              });
-            },
-            icon: Icons.storage_rounded,
-            isPressed: _isCachePressed,
-            isDark: isDark,
-            showBadge: false,
-          ),
-        ],*/
       ],
     );
   }
@@ -246,16 +274,9 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.white.withOpacity(0.2),
-              Colors.white.withOpacity(0.1),
-            ],
-          ),
+          color: Colors.black.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withOpacity(0.25), width: 1),
+          border: Border.all(color: Colors.black.withOpacity(0.2), width: 1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -272,7 +293,7 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
             child: Stack(
               alignment: Alignment.center,
               children: [
-                Icon(icon, color: Colors.white, size: 18),
+                Icon(icon, color: Colors.black, size: 18),
                 if (showBadge)
                   Positioned(
                     right: 8,
@@ -286,11 +307,11 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
                             width: 6,
                             height: 6,
                             decoration: BoxDecoration(
-                              color: AppColors.accent,
+                              color: AppColors.error,
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppColors.accent.withOpacity(0.5),
+                                  color: AppColors.error.withOpacity(0.5),
                                   blurRadius: 2,
                                   spreadRadius: 0.5,
                                 ),
@@ -313,16 +334,9 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.white.withOpacity(0.15),
-            Colors.white.withOpacity(0.08),
-          ],
-        ),
+        color: Colors.black.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+        border: Border.all(color: Colors.black.withOpacity(0.15), width: 1),
       ),
       child: Row(
         children: [
@@ -331,26 +345,17 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Colors.white.withOpacity(0.25),
-                  Colors.white.withOpacity(0.15),
-                ],
-              ),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white.withOpacity(0.3)),
+              border: Border.all(color: Colors.black.withOpacity(0.2)),
             ),
             child: Icon(
               Icons.directions_car_filled_rounded,
-              color: Colors.white,
+              color: Colors.black,
               size: 18,
             ),
           ),
-
           const SizedBox(width: 12),
-
           // Car Name and Parts Count
           Expanded(
             child: Column(
@@ -360,11 +365,11 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
                 Text(
                   widget.carName,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    height: 1.1,
-                  ),
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        height: 1.1,
+                      ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -375,7 +380,6 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
               ],
             ),
           ),
-
           // Status Indicator
           _buildStatusChip(isDark),
         ],
@@ -393,7 +397,7 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
           child: CircularProgressIndicator(
             strokeWidth: 2,
             valueColor: AlwaysStoppedAnimation<Color>(
-              Colors.white.withOpacity(0.8),
+              Colors.black.withOpacity(0.7),
             ),
           ),
         ),
@@ -402,7 +406,7 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
           'Loading parts...',
           style: TextStyle(
             fontSize: 12,
-            color: Colors.white.withOpacity(0.8),
+            color: Colors.black.withOpacity(0.7),
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -423,7 +427,7 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
                 text: value.toString(),
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppColors.accent,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -433,7 +437,7 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
                     : ' parts available',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.white.withOpacity(0.8),
+                  color: Colors.black.withOpacity(0.7),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -448,21 +452,13 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: widget.isLoading
-              ? [
-                  AppColors.accent.withOpacity(0.3),
-                  AppColors.accent.withOpacity(0.2),
-                ]
-              : [
-                  AppColors.success.withOpacity(0.3),
-                  AppColors.success.withOpacity(0.2),
-                ],
-        ),
+        color: widget.isLoading
+            ? AppColors.info.withOpacity(0.2)
+            : AppColors.success.withOpacity(0.2),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: widget.isLoading
-              ? AppColors.accent.withOpacity(0.4)
+              ? AppColors.info.withOpacity(0.4)
               : AppColors.success.withOpacity(0.4),
         ),
       ),
@@ -473,7 +469,7 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
             width: 4,
             height: 4,
             decoration: BoxDecoration(
-              color: widget.isLoading ? AppColors.accent : AppColors.success,
+              color: widget.isLoading ? AppColors.info : AppColors.success,
               shape: BoxShape.circle,
             ),
           ),
@@ -482,7 +478,7 @@ class _CarPartsHeaderState extends State<CarPartsHeader>
             widget.isLoading ? 'Loading' : 'Ready',
             style: TextStyle(
               fontSize: 10,
-              color: Colors.white,
+              color: widget.isLoading ? AppColors.info : AppColors.success,
               fontWeight: FontWeight.w600,
             ),
           ),

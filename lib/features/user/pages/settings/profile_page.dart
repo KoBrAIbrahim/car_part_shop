@@ -521,12 +521,12 @@ class _ProfilePageState extends State<ProfilePage>
                                               vertical: 8,
                                             ),
                                             decoration: BoxDecoration(
-                                              color: AppColors.accent
+                                              color: AppColors.background
                                                   .withOpacity(0.1),
                                               borderRadius:
                                                   BorderRadius.circular(20),
                                               border: Border.all(
-                                                color: AppColors.accent
+                                                color: AppColors.background
                                                     .withOpacity(0.3),
                                               ),
                                             ),
@@ -539,7 +539,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                               .garageCustomer
                                                       ? Icons.build_rounded
                                                       : Icons.person_rounded,
-                                                  color: AppColors.accent,
+                                                  color: AppColors.background,
                                                   size: 16,
                                                 ),
                                                 const SizedBox(width: 8),
@@ -554,7 +554,7 @@ class _ProfilePageState extends State<ProfilePage>
                                                           'profile.regular_buyer',
                                                         ),
                                                   style: TextStyle(
-                                                    color: AppColors.accent,
+                                                    color: AppColors.background,
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 14,
                                                   ),
@@ -944,7 +944,7 @@ class _ProfilePageState extends State<ProfilePage>
         children: [
           Row(
             children: [
-              Icon(Icons.store_outlined, color: AppColors.accent, size: 24),
+              Icon(Icons.store_outlined, color: AppColors.background, size: 24),
               const SizedBox(width: 12),
               Text(
                 tr('profile.garage_info'),
@@ -1031,7 +1031,7 @@ class _ProfilePageState extends State<ProfilePage>
       children: [
         Row(
           children: [
-            Icon(Icons.image_outlined, color: AppColors.accent, size: 20),
+            Icon(Icons.image_outlined, color: AppColors.background, size: 20),
             const SizedBox(width: 8),
             Text(
               tr('profile.garage_image'),
@@ -1406,7 +1406,7 @@ class _ProfilePageState extends State<ProfilePage>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(color: AppColors.accent),
+                  CircularProgressIndicator(color: AppColors.background),
                   const SizedBox(height: 12),
                   Text(
                     tr('profile.loading_image'),
@@ -1448,7 +1448,7 @@ class _ProfilePageState extends State<ProfilePage>
                           ? loadingProgress.cumulativeBytesLoaded /
                                 loadingProgress.expectedTotalBytes!
                           : null,
-                      color: AppColors.accent,
+                      color: AppColors.background,
                     ),
                   );
                 },

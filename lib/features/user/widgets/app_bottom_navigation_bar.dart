@@ -4,107 +4,118 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/providers/theme_provider.dart';
+import '../../../core/localization/translation_keys.dart';
 import 'dart:ui' as ui;
 
 class AppBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
-  final Function(int)? onTap; // Made optional
+  final Function(int)? onTap;
 
   const AppBottomNavigationBar({
     super.key,
     required this.currentIndex,
-    this.onTap, // No longer required
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 600;
-    final isRtl =
-        context.locale.languageCode == 'ar' ||
+    final isTablet = screenWidth >= 600 && screenWidth < 1200;
+    final isRtl = context.locale.languageCode == 'ar' ||
         context.locale.languageCode == 'he';
 
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, child) {
         final isDark = themeProvider.isDarkMode;
+        final navBarBg = isDark ? AppColors.darkCardBackground : Colors.white;
 
+        // Outer container fills the bottom area; set its color so the area
+        // behind the rounded nav box is black in dark mode.
         return Container(
-          decoration: BoxDecoration(
-            color: isDark ? AppColors.getPrimary(isDark) : AppColors.welcomeBox,
+          color: isDark ? Colors.black : Colors.transparent,
+          child: Container(
+            margin: EdgeInsets.all(isSmallScreen ? 12 : 16),
+            padding: EdgeInsets.symmetric(
+              horizontal: isSmallScreen ? 8 : 16,
+              vertical: isSmallScreen ? 8 : 12,
+            ),
+            decoration: BoxDecoration(
+              // Keep the inner rounded box color (navBarBg) — this makes the
+              // rounded card contrast against the black background in dark mode.
+              color: navBarBg,
+              borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(isDark ? 0.4 : 0.1),
+                blurRadius: 20,
+                offset: const Offset(0, -4),
+                spreadRadius: 0,
+              ),
+              BoxShadow(
+                color: AppColors.yellow.withOpacity(0.1),
+                blurRadius: 15,
+                offset: const Offset(0, 0),
+                spreadRadius: 2,
+              ),
+            ],
           ),
-          padding: EdgeInsets.only(
-            left: isSmallScreen ? 8 : 16,
-            right: isSmallScreen ? 8 : 16,
-            top: isSmallScreen ? 6 : 8,
-            bottom:
-                MediaQuery.of(context).padding.bottom + (isSmallScreen ? 4 : 6),
-          ),
-          child: Directionality(
-            textDirection: isRtl ? ui.TextDirection.rtl : ui.TextDirection.ltr,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final itemWidth =
-                    (constraints.maxWidth - (isSmallScreen ? 32 : 64)) / 5;
-
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildNavItem(
-                      context: context,
-                      index: 0,
-                      icon: Icons.home_rounded,
-                      label: 'user.nav.home'.tr(),
-                      isSelected: currentIndex == 0,
-                      isSmallScreen: isSmallScreen,
-                      itemWidth: itemWidth,
-                      isDark: isDark,
-                    ),
-                    _buildNavItem(
-                      context: context,
-                      index: 1,
-                      icon: Icons.build_rounded,
-                      label: 'user.nav.tools'.tr(),
-                      isSelected: currentIndex == 1,
-                      isSmallScreen: isSmallScreen,
-                      itemWidth: itemWidth,
-                      isDark: isDark,
-                    ),
-                    _buildNavItem(
-                      context: context,
-                      index: 2,
-                      icon: Icons.local_offer_rounded,
-                      label: 'user.nav.sales'.tr(),
-                      isSelected: currentIndex == 2,
-                      isSmallScreen: isSmallScreen,
-                      itemWidth: itemWidth,
-                      isDark: isDark,
-                    ),
-                    _buildNavItem(
-                      context: context,
-                      index: 3,
-                      icon: Icons.shopping_cart_rounded,
-                      label: 'user.nav.cart'.tr(),
-                      isSelected: currentIndex == 3,
-                      isSmallScreen: isSmallScreen,
-                      itemWidth: itemWidth,
-                      isDark: isDark,
-                    ),
-                    _buildNavItem(
-                      context: context,
-                      index: 4,
-                      icon: Icons.settings_rounded,
-                      label: 'user.nav.settings'.tr(),
-                      isSelected: currentIndex == 4,
-                      isSmallScreen: isSmallScreen,
-                      itemWidth: itemWidth,
-                      isDark: isDark,
-                    ),
-                  ],
-                );
-              },
+          child: SafeArea(
+            child: Directionality(
+              textDirection: isRtl ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildNavItem(
+                    context: context,
+                    index: 0,
+                    icon: Icons.home_rounded,
+                      label: TranslationKeys.bottomNavHome.tr(),
+                    isSelected: currentIndex == 0,
+                    isSmallScreen: isSmallScreen,
+                    isDark: isDark,
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    index: 1,
+                    icon: Icons.build_rounded,
+                      label: TranslationKeys.bottomNavTools.tr(),
+                    isSelected: currentIndex == 1,
+                    isSmallScreen: isSmallScreen,
+                    isDark: isDark,
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    index: 2,
+                    icon: Icons.local_offer_rounded,
+                      label: TranslationKeys.bottomNavSales.tr(),
+                    isSelected: currentIndex == 2,
+                    isSmallScreen: isSmallScreen,
+                    isDark: isDark,
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    index: 3,
+                    icon: Icons.shopping_cart_rounded,
+                      label: TranslationKeys.bottomNavCart.tr(),
+                    isSelected: currentIndex == 3,
+                    isSmallScreen: isSmallScreen,
+                    isDark: isDark,
+                  ),
+                  _buildNavItem(
+                    context: context,
+                    index: 4,
+                    icon: Icons.settings_rounded,
+                      label: TranslationKeys.bottomNavSettings.tr(),
+                    isSelected: currentIndex == 4,
+                    isSmallScreen: isSmallScreen,
+                    isDark: isDark,
+                  ),
+                ],
+              ),
             ),
           ),
-        );
+        ));
       },
     );
   }
@@ -116,57 +127,74 @@ class AppBottomNavigationBar extends StatelessWidget {
     required String label,
     required bool isSelected,
     required bool isSmallScreen,
-    required double itemWidth,
     required bool isDark,
   }) {
-    return GestureDetector(
-      onTap: () => _handleNavigation(context, index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: itemWidth,
-        padding: EdgeInsets.symmetric(
-          horizontal: isSmallScreen ? 6 : 12,
-          vertical: isSmallScreen ? 6 : 8,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-          border: isSelected
-              ? Border.all(
-                  color: isDark ? Colors.white : Colors.black,
-                  width: 2,
-                )
-              : null,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: isSelected
-                  ? (isDark ? Colors.white : Colors.black)
-                  : (isDark
-                        ? Colors.white.withOpacity(0.6)
-                        : Colors.black.withOpacity(0.6)),
-              size: isSmallScreen ? 20 : 24,
-            ),
-            SizedBox(height: isSmallScreen ? 2 : 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: isSmallScreen ? 9 : 10,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+    final textColor = AppColors.getTextColor(isDark);
+    final secondaryTextColor = AppColors.getTextSecondaryColor(isDark);
+
+    return Expanded(
+      flex: isSelected ? 2 : 1, // Selected item takes 2x width
+      child: GestureDetector(
+        onTap: () => _handleNavigation(context, index),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          margin: EdgeInsets.symmetric(horizontal: isSmallScreen ? 2 : 4),
+          padding: EdgeInsets.symmetric(
+            horizontal: isSmallScreen ? 6 : 10,
+            vertical: isSmallScreen ? 8 : 10,
+          ),
+          decoration: BoxDecoration(
+            color: isSelected 
+                ? AppColors.yellow // Yellow background for selected
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(25),
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: AppColors.yellow.withOpacity(0.4),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                      spreadRadius: 0,
+                    ),
+                  ]
+                : null,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Icon
+              Icon(
+                icon,
                 color: isSelected
-                    ? (isDark ? Colors.white : Colors.black)
-                    : (isDark
-                          ? Colors.white.withOpacity(0.6)
-                          : Colors.black.withOpacity(0.6)),
+                    ? Colors.black // Black icon on yellow background
+                    : secondaryTextColor, // Secondary color when not selected
+                size: isSmallScreen ? 22 : 26,
               ),
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+              
+              // Label - only show for selected item on mobile, always show on larger screens
+              if (isSelected || !isSmallScreen) ...[
+                SizedBox(width: isSmallScreen ? 6 : 8),
+                Flexible(
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: isSmallScreen ? 12 : 14,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                      color: isSelected
+                          ? Colors.black // Black text on yellow background
+                          : secondaryTextColor, // Secondary color when not selected
+                      letterSpacing: 0.2,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );

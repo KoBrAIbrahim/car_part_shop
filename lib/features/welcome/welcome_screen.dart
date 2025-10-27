@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import 'package:app/core/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +28,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Future<void> _checkAuthenticationAndNavigate() async {
     // Wait a bit to show the welcome screen
     await Future.delayed(const Duration(seconds: 2));
-
+    
     if (!mounted || _hasNavigated) return;
 
     setState(() {
@@ -43,7 +44,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         authProvider.authState == AuthState.loading) {
       await Future.delayed(const Duration(milliseconds: 200));
       attempts++;
-
       // Prevent infinite waiting (max 5 seconds)
       if (attempts > 25 || !mounted) break;
     }
@@ -71,82 +71,82 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      // Force light theme for auth pages
-      data: ThemeData.light().copyWith(
-        primaryColor: AppColors.primary,
-        scaffoldBackgroundColor: AppColors.background,
-        appBarTheme: AppBarTheme(
-          backgroundColor: AppColors.background,
-          foregroundColor: AppColors.textDark,
-        ),
-      ),
-      child: Directionality(
-        textDirection: _isRtl ? ui.TextDirection.rtl : ui.TextDirection.ltr,
-        child: Scaffold(
-          backgroundColor: AppColors.background,
-          body: SafeArea(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('assets/logo.png', width: 200, height: 200)
-                      .animate()
-                      .fadeIn(duration: const Duration(milliseconds: 800))
-                      .scale(
-                        begin: const Offset(0.5, 0.5),
-                        end: const Offset(1, 1),
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isDark = themeProvider.isDarkMode;
+    
+    // Get theme-aware colors
+    final bgColor = AppColors.getBackground(isDark);
+    final textColor = AppColors.getTextColor(isDark);
+    final secondaryTextColor = AppColors.getTextSecondaryColor(isDark);
+
+    return Directionality(
+      textDirection: _isRtl ? ui.TextDirection.rtl : ui.TextDirection.ltr,
+      child: Scaffold(
+        backgroundColor: bgColor,
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Logo with animation
+                Image.asset('assets/logo1.png', width: 200, height: 200)
+                    .animate()
+                    .fadeIn(duration: const Duration(milliseconds: 800))
+                    .scale(
+                      begin: const Offset(0.5, 0.5),
+                      end: const Offset(1, 1),
+                    ),
+                
+                const SizedBox(height: 40),
+                
+                // Welcome title
+                Text(
+                  'welcome.title'.tr(),
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        color: textColor,
+                        fontWeight: FontWeight.bold,
                       ),
-
-                  const SizedBox(height: 40),
-
-                  Text(
-                        'welcome.title'.tr(),
-                        style: Theme.of(context).textTheme.headlineMedium
-                            ?.copyWith(
-                              color: AppColors.textDark,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      )
-                      .animate()
-                      .fadeIn(delay: const Duration(milliseconds: 400))
-                      .slideY(begin: 0.5, end: 0),
-
-                  const SizedBox(height: 20),
-
-                  Text(
-                        'welcome.subtitle'.tr(),
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppColors.textDark.withOpacity(0.7),
+                )
+                    .animate()
+                    .fadeIn(delay: const Duration(milliseconds: 400))
+                    .slideY(begin: 0.5, end: 0),
+                
+                const SizedBox(height: 20),
+                
+                // Subtitle
+                Text(
+                  'welcome.subtitle'.tr(),
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: secondaryTextColor,
+                      ),
+                  textAlign: TextAlign.center,
+                )
+                    .animate()
+                    .fadeIn(delay: const Duration(milliseconds: 600))
+                    .slideY(begin: 0.5, end: 0),
+                
+                const SizedBox(height: 60),
+                
+                // Loading indicator when checking authentication
+                if (_isCheckingAuth)
+                  Column(
+                    children: [
+                      CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.yellow,
                         ),
-                      )
-                      .animate()
-                      .fadeIn(delay: const Duration(milliseconds: 600))
-                      .slideY(begin: 0.5, end: 0),
-
-                  const SizedBox(height: 60),
-
-                  // Show loading indicator when checking authentication
-                  if (_isCheckingAuth)
-                    Column(
-                      children: [
-                        CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            AppColors.accent,
-                          ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Checking login status...',
+                        style: TextStyle(
+                          color: secondaryTextColor,
+                          fontSize: 14,
                         ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Checking login status...',
-                          style: TextStyle(
-                            color: AppColors.textDark.withOpacity(0.6),
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ).animate().fadeIn(),
-                ],
-              ),
+                      ),
+                    ],
+                  ).animate().fadeIn(),
+              ],
             ),
           ),
         ),

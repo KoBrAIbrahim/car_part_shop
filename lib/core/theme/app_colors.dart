@@ -1,73 +1,87 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Light Mode Colors
-  static const Color lightBackground = Color(0xFFFDFDFD); // شبه أبيض
-  static const Color lightSurface = Color(
-    0xFFF5F5F5,
-  ); // رمادي فاتح للخلفيات الثانوية
+  // ==================== LIGHT MODE ====================
+  static const Color lightBackground = Colors.white; // خلفية بيضاء نقية
+  static const Color lightSurface = Color(0xFFF8F8F8); // رمادي فاتح جداً للأسطح
   static const Color lightCardBackground = Colors.white;
-  static const Color lightTextDark = Color(0xFF212121); // رمادي غامق للنصوص
-  static const Color lightPrimary = Color.fromARGB(
-    255,
-    253,
-    213,
-    52,
-  ); // أصفر ذهبي للوضع الفاتح
+  static const Color lightText = Colors.black; // نص أسود
+  static const Color lightTextSecondary = Color(0xFF666666); // نص ثانوي رمادي
+  
+  // ==================== DARK MODE ====================
+  static const Color darkBackground = Colors.black; // خلفية سوداء نقية
+  static const Color darkSurface = Color(0xFF1A1A1A); // سطح داكن قليلاً
+  static const Color darkCardBackground = Color(0xFF2A2A2A); // خلفية البطاقات
+  static const Color darkText = Colors.white; // نص أبيض
+  static const Color darkTextSecondary = Color(0xFFBBBBBB); // نص ثانوي رمادي فاتح
 
-  // Dark Mode Colors
-  static const Color darkBackground = Color(0xFF121212); // خلفية داكنة
-  static const Color darkSurface = Color(0xFF1E1E1E); // سطح داكن
-  static const Color darkCardBackground = Color(
-    0xFF2D2D2D,
-  ); // خلفية البطاقات الداكنة
-  static const Color darkTextLight = Color(0xFFE0E0E0); // نص فاتح للوضع الداكن
-  static const Color darkPrimary = Color(0xFF000000); // أسود للوضع الداكن
+  // ==================== COMMON COLORS ====================
+  // Yellow - للهيدر والفوتر
+  static const Color yellow = Color(0xFFFDD435); // أصفر ذهبي
+  static const Color yellowDark = Color(0xFFE5C030); // أصفر أغمق قليلاً للتفاعل
+  static const Color yellowLight = Color(0xFFFEE680); // أصفر فاتح
+  
+  // Status Colors
+  static const Color success = Color(0xFF4CAF50); // أخضر نجاح
+  static const Color successDark = Color(0xFF388E3C); // أخضر غامق
+  static const Color successLight = Color(0xFF81C784); // أخضر فاتح
+  
+  static const Color error = Color(0xFFF44336); // أحمر خطأ
+  static const Color errorDark = Color(0xFFD32F2F); // أحمر غامق
+  static const Color errorLight = Color(0xFFE57373); // أحمر فاتح
+  
+  static const Color warning = Color(0xFFFF9800); // برتقالي تحذير
+  static const Color info = Color(0xFF2196F3); // أزرق معلومات
 
-  // Common colors (same for both modes)
-  static const Color secondary = Color(0xFF000000); // أسود رئيسي
-  static const Color accent = Color(0xFF1E88E5); // أزرق لإضافة توازن
-  static const Color textLight = Colors.white; // نصوص فوق الأسود أو الأزرق
-  static const Color welcomeBox = Color.fromARGB(
-    255,
-    253,
-    213,
-    52,
-  ); // أصفر ذهبي للوضع الفاتح
-
-  // ألوان حالة
-  static const Color error = Color(0xFFE53935); // أحمر
-  static const Color success = Color(0xFF43A047); // أخضر نجاح
-  static const Color warning = Color(0xFFFFA000); // برتقالي تحذير
-
-  // العناصر
-  static const Color divider = Color(0xFFE0E0E0);
-  static const Color darkDivider = Color(0xFF424242);
-
-  // حالات Disabled
-  static const Color disabledButton = Color(0xFFBDBDBD);
-  static const Color disabledText = Color(0xFF9E9E9E);
-
-  // Gradient أساسي (أصفر → أسود للوضع الفاتح)
-  static const List<Color> lightPrimaryGradient = [lightPrimary, secondary];
-  static const List<Color> darkPrimaryGradient = [darkPrimary, secondary];
-
-  // Helper methods to get theme-specific colors
+  // ==================== HELPER METHODS ====================
+  
+  // Background
   static Color getBackground(bool isDark) =>
       isDark ? darkBackground : lightBackground;
-  static Color getSurface(bool isDark) => isDark ? darkSurface : lightSurface;
+  
+  // Surface
+  static Color getSurface(bool isDark) =>
+      isDark ? darkSurface : lightSurface;
+  
+  // Card Background
   static Color getCardBackground(bool isDark) =>
       isDark ? darkCardBackground : lightCardBackground;
+  
+  // Text Colors
   static Color getTextColor(bool isDark) =>
-      isDark ? darkTextLight : lightTextDark;
-  static Color getPrimary(bool isDark) => isDark ? darkPrimary : lightPrimary;
-  static Color getDivider(bool isDark) => isDark ? darkDivider : divider;
+      isDark ? darkText : lightText;
+  
+  static Color getTextSecondaryColor(bool isDark) =>
+      isDark ? darkTextSecondary : lightTextSecondary;
+  
+  // Divider
+  static Color getDivider(bool isDark) =>
+      isDark ? Color(0xFF333333) : Color(0xFFE0E0E0);
+  
+  // Disabled States
+  static Color getDisabledColor(bool isDark) =>
+      isDark ? Color(0xFF555555) : Color(0xFFBDBDBD);
 
-  // Legacy support - use light theme as default
+  // ==================== GRADIENTS ====================
+  static const List<Color> yellowGradient = [
+    yellow,
+    yellowDark,
+  ];
+  
+  static const List<Color> successGradient = [
+    successLight,
+    success,
+  ];
+  
+  static const List<Color> errorGradient = [
+    errorLight,
+    error,
+  ];
+
+  // ==================== LEGACY SUPPORT ====================
   static Color get background => lightBackground;
   static Color get surface => lightSurface;
   static Color get cardBackground => lightCardBackground;
-  static Color get textDark => lightTextDark;
-  static Color get primary => lightPrimary;
-  static Color get currentDivider => divider;
+  static Color get textDark => lightText;
+  static Color get primary => yellow;
 }

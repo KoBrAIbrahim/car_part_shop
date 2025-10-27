@@ -23,16 +23,17 @@ class CarPartsPagination extends StatelessWidget {
   Widget build(BuildContext context) {
     if (totalPages <= 1) return const SizedBox.shrink();
 
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = AppColors.getCardBackground(isDark);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark
-            ? AppColors.getCardBackground(true)
-            : AppColors.getCardBackground(false),
+        color: cardBg,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withOpacity(isDark ? 0.3 : 0.1),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),
@@ -75,6 +76,7 @@ class CarPartsPagination extends StatelessWidget {
     bool isNext = false,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = AppColors.getTextColor(isDark);
 
     return TextButton.icon(
       onPressed: onPressed,
@@ -93,8 +95,8 @@ class CarPartsPagination extends StatelessWidget {
       ),
       style: TextButton.styleFrom(
         foregroundColor: onPressed != null
-            ? AppColors.getPrimary(isDark)
-            : AppColors.getTextColor(isDark).withOpacity(0.4),
+            ? AppColors.yellow
+            : textColor.withOpacity(0.4),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
@@ -115,7 +117,7 @@ class CarPartsPagination extends StatelessWidget {
               height: 16,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
-                color: AppColors.getPrimary(isDark),
+                color: AppColors.yellow,
               ),
             )
           else
@@ -175,6 +177,7 @@ class CarPartsPagination extends StatelessWidget {
     bool isDark,
   ) {
     final isCurrentPage = pageIndex == currentPage;
+    final textColor = AppColors.getTextColor(isDark);
 
     return GestureDetector(
       onTap: !isCurrentPage && !isLoading
@@ -185,12 +188,12 @@ class CarPartsPagination extends StatelessWidget {
         height: 32,
         decoration: BoxDecoration(
           color: isCurrentPage
-              ? AppColors.getPrimary(isDark)
+              ? AppColors.yellow
               : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
             color: isCurrentPage
-                ? AppColors.getPrimary(isDark)
+                ? AppColors.yellow
                 : AppColors.getDivider(isDark),
           ),
         ),
@@ -201,8 +204,8 @@ class CarPartsPagination extends StatelessWidget {
               fontSize: 12,
               fontWeight: isCurrentPage ? FontWeight.bold : FontWeight.normal,
               color: isCurrentPage
-                  ? Colors.white
-                  : AppColors.getTextColor(isDark),
+                  ? Colors.black // Black text on yellow
+                  : textColor,
             ),
           ),
         ),

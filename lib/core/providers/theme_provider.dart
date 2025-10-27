@@ -32,61 +32,175 @@ class ThemeProvider extends ChangeNotifier {
     }
   }
 
+  // ==================== LIGHT THEME ====================
   ThemeData get lightTheme => ThemeData(
-    brightness: Brightness.light,
-    primaryColor: AppColors.lightPrimary,
-    scaffoldBackgroundColor: AppColors.lightBackground,
-    cardColor: AppColors.lightCardBackground,
-    dividerColor: AppColors.divider,
-    colorScheme: ColorScheme.light(
-      primary: AppColors.lightPrimary,
-      secondary: AppColors.accent,
-      surface: AppColors.lightSurface,
-      background: AppColors.lightBackground,
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: AppColors.lightTextDark),
-      bodyMedium: TextStyle(color: AppColors.lightTextDark),
-      titleLarge: TextStyle(color: AppColors.lightTextDark),
-    ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.white, // White background for light mode
-      foregroundColor: Colors.black, // Black text for light mode
-      elevation: 0,
-    ),
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.white, // White background for light mode
-      selectedItemColor: Colors.black, // Black for selected items
-      unselectedItemColor: Colors.black54, // Dark gray for unselected items
-    ),
-  );
+        brightness: Brightness.light,
+        primaryColor: AppColors.yellow,
+        scaffoldBackgroundColor: AppColors.lightBackground,
+        cardColor: AppColors.lightCardBackground,
+        dividerColor: AppColors.getDivider(false),
+        
+        colorScheme: ColorScheme.light(
+          primary: AppColors.yellow,
+          secondary: AppColors.yellowDark,
+          surface: AppColors.lightSurface,
+          background: AppColors.lightBackground,
+          error: AppColors.error,
+          onPrimary: Colors.black, // Text on yellow
+          onSecondary: Colors.black,
+          onSurface: AppColors.lightText,
+          onBackground: AppColors.lightText,
+          onError: Colors.white,
+        ),
+        
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: AppColors.lightText),
+          bodyMedium: TextStyle(color: AppColors.lightText),
+          bodySmall: TextStyle(color: AppColors.lightTextSecondary),
+          titleLarge: TextStyle(color: AppColors.lightText, fontWeight: FontWeight.bold),
+          titleMedium: TextStyle(color: AppColors.lightText, fontWeight: FontWeight.w600),
+          titleSmall: TextStyle(color: AppColors.lightText),
+        ),
+        
+        // AppBar - Yellow Header
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.yellow,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        
+        // Bottom Navigation Bar - Yellow Footer
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: AppColors.yellow,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.black54,
+          elevation: 8,
+        ),
+        
+        // Buttons
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.yellow,
+            foregroundColor: Colors.black,
+            elevation: 2,
+          ),
+        ),
+        
+        // Text Buttons
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.yellow,
+          ),
+        ),
+        
+        // Input Fields
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.getDivider(false)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.getDivider(false)),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.yellow, width: 2),
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.error),
+          ),
+          labelStyle: const TextStyle(color: AppColors.lightTextSecondary),
+          hintStyle: const TextStyle(color: AppColors.lightTextSecondary),
+        ),
+      );
 
+  // ==================== DARK THEME ====================
   ThemeData get darkTheme => ThemeData(
-    brightness: Brightness.dark,
-    primaryColor: AppColors.darkPrimary,
-    scaffoldBackgroundColor: AppColors.darkBackground,
-    cardColor: AppColors.darkCardBackground,
-    dividerColor: AppColors.darkDivider,
-    colorScheme: ColorScheme.dark(
-      primary: AppColors.darkPrimary,
-      secondary: AppColors.accent,
-      surface: AppColors.darkSurface,
-      background: AppColors.darkBackground,
-    ),
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: AppColors.darkTextLight),
-      bodyMedium: TextStyle(color: AppColors.darkTextLight),
-      titleLarge: TextStyle(color: AppColors.darkTextLight),
-    ),
-    appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.darkPrimary,
-      foregroundColor: AppColors.darkTextLight,
-      elevation: 0,
-    ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: AppColors.darkPrimary,
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Colors.white.withOpacity(0.6),
-    ),
-  );
+        brightness: Brightness.dark,
+        primaryColor: AppColors.yellow,
+        scaffoldBackgroundColor: AppColors.darkBackground,
+        cardColor: AppColors.darkCardBackground,
+        dividerColor: AppColors.getDivider(true),
+        
+        colorScheme: ColorScheme.dark(
+          primary: AppColors.yellow,
+          secondary: AppColors.yellowDark,
+          surface: AppColors.darkSurface,
+          background: AppColors.darkBackground,
+          error: AppColors.error,
+          onPrimary: Colors.black, // Text on yellow
+          onSecondary: Colors.black,
+          onSurface: AppColors.darkText,
+          onBackground: AppColors.darkText,
+          onError: Colors.white,
+        ),
+        
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: AppColors.darkText),
+          bodyMedium: TextStyle(color: AppColors.darkText),
+          bodySmall: TextStyle(color: AppColors.darkTextSecondary),
+          titleLarge: TextStyle(color: AppColors.darkText, fontWeight: FontWeight.bold),
+          titleMedium: TextStyle(color: AppColors.darkText, fontWeight: FontWeight.w600),
+          titleSmall: TextStyle(color: AppColors.darkText),
+        ),
+        
+        // AppBar - Yellow Header
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.yellow,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        
+        // Bottom Navigation Bar - Yellow Footer
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: AppColors.yellow,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.black54,
+          elevation: 8,
+        ),
+        
+        // Buttons
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.yellow,
+            foregroundColor: Colors.black,
+            elevation: 2,
+          ),
+        ),
+        
+        // Text Buttons
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.yellow,
+          ),
+        ),
+        
+        // Input Fields
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.getDivider(true)),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.getDivider(true)),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.yellow, width: 2),
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.error),
+          ),
+          labelStyle: const TextStyle(color: AppColors.darkTextSecondary),
+          hintStyle: const TextStyle(color: AppColors.darkTextSecondary),
+        ),
+      );
 }

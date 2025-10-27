@@ -105,7 +105,7 @@ class _AdvancedSettingsPageState extends State<AdvancedSettingsPage>
                               end: Alignment.bottomRight,
                               colors: [
                                 AppColors.primary.withOpacity(0.1),
-                                AppColors.accent.withOpacity(0.05),
+                                AppColors.background.withOpacity(0.05),
                               ],
                             ),
                           ),
@@ -541,13 +541,13 @@ class _SettingsTileWidgetState extends State<_SettingsTileWidget> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: (widget.isDestructive ? AppColors.error : AppColors.accent)
+                color: (widget.isDestructive ? AppColors.error : AppColors.background)
                     .withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 widget.icon,
-                color: widget.isDestructive ? AppColors.error : AppColors.accent,
+                color: widget.isDestructive ? AppColors.error : AppColors.background,
                 size: 20,
               ),
             ),

@@ -16,32 +16,46 @@ class LanguageSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final current = context.locale;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    // Dynamic colors based on theme
+    final bgColor = isDark ? AppColors.darkSurface : Colors.white;
+    final textColor = AppColors.getTextColor(isDark);
+    final borderColor = isDark 
+        ? AppColors.yellow.withOpacity(0.3) 
+        : AppColors.yellow.withOpacity(0.15);
+    final shadowColor = AppColors.yellow.withOpacity(0.12);
 
     return PopupMenuButton<Locale>(
       tooltip: 'Change language',
       initialValue: current,
       offset: const Offset(0, 12),
       elevation: 12,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      color: bgColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(
+          color: isDark ? AppColors.getDivider(true) : Colors.transparent,
+        ),
+      ),
       onSelected: (locale) async {
         if (locale.languageCode != current.languageCode) {
           await context.setLocale(locale);
         }
       },
       itemBuilder: (_) => [
-        for (final loc in locales) _buildItem(context, loc, current),
+        for (final loc in locales) _buildItem(context, loc, current, isDark),
       ],
-      // وجه الزر (يظهر اللغة الحالية)
+      // Button face (shows current language)
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.95),
+          color: bgColor.withOpacity(0.95),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.primary.withOpacity(0.15)),
+          border: Border.all(color: borderColor),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.12),
+              color: shadowColor,
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -50,20 +64,24 @@ class LanguageSwitcher extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.public_rounded, color: Colors.black87, size: 20),
+            Icon(
+              Icons.public_rounded,
+              color: textColor.withOpacity(0.87),
+              size: 20,
+            ),
             const SizedBox(width: 8),
             Text(
               _codeLabel(current.languageCode),
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w700,
-                color: Colors.black,
+                color: textColor,
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(
+            Icon(
               Icons.keyboard_arrow_down_rounded,
               size: 18,
-              color: Colors.black54,
+              color: textColor.withOpacity(0.54),
             ),
           ],
         ),
@@ -75,9 +93,12 @@ class LanguageSwitcher extends StatelessWidget {
     BuildContext context,
     Locale loc,
     Locale current,
+    bool isDark,
   ) {
     final selected = current.languageCode == loc.languageCode;
     final isRtl = _isRtl(loc.languageCode);
+    final textColor = AppColors.getTextColor(isDark);
+    final secondaryTextColor = AppColors.getTextSecondaryColor(isDark);
 
     final row = Row(
       children: [
@@ -89,11 +110,17 @@ class LanguageSwitcher extends StatelessWidget {
             children: [
               Text(
                 _nativeName(loc.languageCode),
-                style: const TextStyle(fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: textColor,
+                ),
               ),
               Text(
                 _englishName(loc.languageCode),
-                style: const TextStyle(fontSize: 12, color: Colors.black54),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: secondaryTextColor,
+                ),
               ),
             ],
           ),
@@ -102,17 +129,21 @@ class LanguageSwitcher extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
-              color: AppColors.accent, // Blue background
+              color: AppColors.yellow,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Row(
+            child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.check, size: 16, color: Colors.white),
-                const SizedBox(width: 4),
-                const Text(
+                Icon(Icons.check, size: 16, color: Colors.black),
+                SizedBox(width: 4),
+                Text(
                   'Current',
-                  style: TextStyle(fontSize: 12, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),
@@ -120,7 +151,6 @@ class LanguageSwitcher extends StatelessWidget {
       ],
     );
 
-    // نجعل اتجاه عنصر القائمة مناسبًا للغة نفسها
     return PopupMenuItem<Locale>(
       value: loc,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

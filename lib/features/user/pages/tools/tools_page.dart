@@ -80,16 +80,13 @@ class _ToolsPageState extends State<ToolsPage> {
   }
 
   Widget _buildHeader(bool isDark) {
+    final cardBg = AppColors.getCardBackground(isDark);
+    final textColor = AppColors.getTextColor(isDark);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [AppColors.darkCardBackground, AppColors.darkSurface]
-              : [AppColors.lightCardBackground, AppColors.lightSurface],
-        ),
+        color: cardBg,
         boxShadow: [
           BoxShadow(
             color: isDark
@@ -111,21 +108,15 @@ class _ToolsPageState extends State<ToolsPage> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.getPrimary(isDark).withOpacity(0.2),
-                      AppColors.getPrimary(isDark).withOpacity(0.1),
-                    ],
-                  ),
+                  color: AppColors.yellow.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   Icons.build_rounded,
-                  color: AppColors.getPrimary(isDark),
+                  color: AppColors.yellow,
                   size: 24,
                 ),
               ),
-
               const SizedBox(width: 16),
 
               // Title and Count
@@ -138,7 +129,7 @@ class _ToolsPageState extends State<ToolsPage> {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.getTextColor(isDark),
+                        color: textColor,
                       ),
                     ),
                     if (provider.hasData) ...[
@@ -149,9 +140,7 @@ class _ToolsPageState extends State<ToolsPage> {
                             : 'Page ${provider.currentPage + 1} of ${provider.totalPages} ($totalTools total)',
                         style: TextStyle(
                           fontSize: 14,
-                          color: AppColors.getTextColor(
-                            isDark,
-                          ).withOpacity(0.7),
+                          color: textColor.withOpacity(0.7),
                         ),
                       ),
                     ],
@@ -163,12 +152,7 @@ class _ToolsPageState extends State<ToolsPage> {
               if (provider.hasData)
                 Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.accent.withOpacity(0.2),
-                        AppColors.accent.withOpacity(0.1),
-                      ],
-                    ),
+                    color: AppColors.yellow.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: IconButton(
@@ -180,11 +164,11 @@ class _ToolsPageState extends State<ToolsPage> {
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                AppColors.accent,
+                                AppColors.yellow,
                               ),
                             ),
                           )
-                        : Icon(Icons.refresh_rounded, color: AppColors.accent),
+                        : Icon(Icons.refresh_rounded, color: AppColors.yellow),
                   ),
                 ),
             ],
@@ -195,31 +179,25 @@ class _ToolsPageState extends State<ToolsPage> {
   }
 
   Widget _buildSearchBar(bool isDark) {
+    final cardBg = AppColors.getCardBackground(isDark);
+    final surfaceBg = AppColors.getSurface(isDark);
+    final textColor = AppColors.getTextColor(isDark);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: isDark
-              ? [AppColors.darkCardBackground, AppColors.darkSurface]
-              : [AppColors.lightCardBackground, AppColors.lightSurface],
-        ),
+        color: cardBg,
       ),
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.background, AppColors.cardBackground],
-          ),
+          color: surfaceBg,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: AppColors.getDivider(isDark).withOpacity(0.3),
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.getPrimary(isDark).withOpacity(0.1),
+              color: AppColors.yellow.withOpacity(0.1),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -231,22 +209,17 @@ class _ToolsPageState extends State<ToolsPage> {
           decoration: InputDecoration(
             hintText: 'Search tools...',
             hintStyle: TextStyle(
-              color: AppColors.getTextColor(isDark).withOpacity(0.6),
+              color: textColor.withOpacity(0.6),
             ),
             prefixIcon: Container(
               margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    AppColors.getPrimary(isDark).withOpacity(0.2),
-                    AppColors.getPrimary(isDark).withOpacity(0.1),
-                  ],
-                ),
+                color: AppColors.yellow.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
                 Icons.search_rounded,
-                color: AppColors.getPrimary(isDark),
+                color: AppColors.yellow,
               ),
             ),
             suffixIcon: _searchController.text.isNotEmpty
@@ -271,7 +244,7 @@ class _ToolsPageState extends State<ToolsPage> {
               vertical: 16,
             ),
           ),
-          style: TextStyle(color: AppColors.getTextColor(isDark), fontSize: 16),
+          style: TextStyle(color: textColor, fontSize: 16),
         ),
       ),
     );
@@ -296,7 +269,7 @@ class _ToolsPageState extends State<ToolsPage> {
 
         return RefreshIndicator(
           onRefresh: provider.refresh,
-          color: AppColors.getPrimary(isDark),
+          color: AppColors.yellow,
           backgroundColor: AppColors.getCardBackground(isDark),
           child: GridView.builder(
             controller: _scrollController,
@@ -331,15 +304,14 @@ class _ToolsPageState extends State<ToolsPage> {
     required bool isDark,
     required bool isGarageOwner,
   }) {
+    final cardBg = AppColors.getCardBackground(isDark);
+    final textColor = AppColors.getTextColor(isDark);
+
     return GestureDetector(
       onTap: () => _showToolDetailsModal(tool),
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.cardBackground, AppColors.background],
-          ),
+          color: cardBg,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: AppColors.getDivider(isDark).withOpacity(0.3),
@@ -348,7 +320,7 @@ class _ToolsPageState extends State<ToolsPage> {
             BoxShadow(
               color: isDark
                   ? Colors.black.withOpacity(0.2)
-                  : AppColors.getPrimary(isDark).withOpacity(0.1),
+                  : Colors.grey.withOpacity(0.1),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),
@@ -367,12 +339,7 @@ class _ToolsPageState extends State<ToolsPage> {
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.getDivider(isDark).withOpacity(0.1),
-                        AppColors.getDivider(isDark).withOpacity(0.05),
-                      ],
-                    ),
+                    color: AppColors.getDivider(isDark).withOpacity(0.1),
                   ),
                   child: CachedNetworkImage(
                     imageUrl: tool.displayImageUrl,
@@ -381,7 +348,7 @@ class _ToolsPageState extends State<ToolsPage> {
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.getPrimary(isDark),
+                          AppColors.yellow,
                         ),
                       ),
                     ),
@@ -425,12 +392,11 @@ class _ToolsPageState extends State<ToolsPage> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.getTextColor(isDark),
+                        color: textColor,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-
                     const SizedBox(height: 4),
 
                     // Vendor
@@ -439,9 +405,7 @@ class _ToolsPageState extends State<ToolsPage> {
                         tool.vendor,
                         style: TextStyle(
                           fontSize: 12,
-                          color: AppColors.getTextColor(
-                            isDark,
-                          ).withOpacity(0.7),
+                          color: textColor.withOpacity(0.7),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -462,7 +426,7 @@ class _ToolsPageState extends State<ToolsPage> {
                               fontWeight: FontWeight.bold,
                               color: tool.isOnSale
                                   ? AppColors.success
-                                  : AppColors.getTextColor(isDark),
+                                  : textColor,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -514,6 +478,8 @@ class _ToolsPageState extends State<ToolsPage> {
   }
 
   Widget _buildLoadingState(bool isDark) {
+    final textColor = AppColors.getTextColor(isDark);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -521,17 +487,12 @@ class _ToolsPageState extends State<ToolsPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.getPrimary(isDark).withOpacity(0.1),
-                  AppColors.getPrimary(isDark).withOpacity(0.05),
-                ],
-              ),
+              color: AppColors.yellow.withOpacity(0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
-                AppColors.getPrimary(isDark),
+                AppColors.yellow,
               ),
             ),
           ),
@@ -539,7 +500,7 @@ class _ToolsPageState extends State<ToolsPage> {
           Text(
             'Loading tools...',
             style: TextStyle(
-              color: AppColors.getTextColor(isDark),
+              color: textColor,
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),
@@ -550,6 +511,8 @@ class _ToolsPageState extends State<ToolsPage> {
   }
 
   Widget _buildErrorState(bool isDark, ToolsProvider provider) {
+    final textColor = AppColors.getTextColor(isDark);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -557,12 +520,7 @@ class _ToolsPageState extends State<ToolsPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.error.withOpacity(0.1),
-                  AppColors.error.withOpacity(0.05),
-                ],
-              ),
+              color: AppColors.error.withOpacity(0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(
@@ -577,14 +535,14 @@ class _ToolsPageState extends State<ToolsPage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.getTextColor(isDark),
+              color: textColor,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             provider.error ?? 'Unknown error',
             style: TextStyle(
-              color: AppColors.getTextColor(isDark).withOpacity(0.7),
+              color: textColor.withOpacity(0.7),
             ),
             textAlign: TextAlign.center,
           ),
@@ -594,8 +552,8 @@ class _ToolsPageState extends State<ToolsPage> {
             icon: const Icon(Icons.refresh_rounded),
             label: const Text('Retry'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.getPrimary(isDark),
-              foregroundColor: isDark ? Colors.white : Colors.black,
+              backgroundColor: AppColors.yellow,
+              foregroundColor: Colors.black,
             ),
           ),
         ],
@@ -604,6 +562,8 @@ class _ToolsPageState extends State<ToolsPage> {
   }
 
   Widget _buildEmptyState(bool isDark) {
+    final textColor = AppColors.getTextColor(isDark);
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -611,18 +571,13 @@ class _ToolsPageState extends State<ToolsPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  AppColors.getTextColor(isDark).withOpacity(0.1),
-                  AppColors.getTextColor(isDark).withOpacity(0.05),
-                ],
-              ),
+              color: textColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Icon(
               Icons.build_rounded,
               size: 48,
-              color: AppColors.getTextColor(isDark).withOpacity(0.6),
+              color: textColor.withOpacity(0.6),
             ),
           ),
           const SizedBox(height: 24),
@@ -631,14 +586,14 @@ class _ToolsPageState extends State<ToolsPage> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.getTextColor(isDark),
+              color: textColor,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'No tools are currently available',
             style: TextStyle(
-              color: AppColors.getTextColor(isDark).withOpacity(0.7),
+              color: textColor.withOpacity(0.7),
             ),
           ),
         ],
@@ -656,14 +611,12 @@ class _ToolsPageState extends State<ToolsPage> {
           return const SizedBox.shrink();
         }
 
+        final cardBg = AppColors.getCardBackground(isDark);
+
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [AppColors.cardBackground, AppColors.background],
-            ),
+            color: cardBg,
             border: Border(
               top: BorderSide(
                 color: AppColors.getDivider(isDark).withOpacity(0.3),
@@ -720,21 +673,13 @@ class _ToolsPageState extends State<ToolsPage> {
 
     return Container(
       decoration: BoxDecoration(
-        gradient: isEnabled
-            ? LinearGradient(
-                colors: [
-                  AppColors.getPrimary(isDark).withOpacity(0.2),
-                  AppColors.getPrimary(isDark).withOpacity(0.1),
-                ],
-              )
-            : null,
-        color: !isEnabled
-            ? AppColors.getDivider(isDark).withOpacity(0.1)
-            : null,
+        color: isEnabled
+            ? AppColors.yellow.withOpacity(0.2)
+            : AppColors.getDivider(isDark).withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isEnabled
-              ? AppColors.getPrimary(isDark).withOpacity(0.3)
+              ? AppColors.yellow.withOpacity(0.3)
               : AppColors.getDivider(isDark).withOpacity(0.3),
         ),
       ),
@@ -751,7 +696,7 @@ class _ToolsPageState extends State<ToolsPage> {
                 Icon(
                   icon,
                   color: isEnabled
-                      ? AppColors.getPrimary(isDark)
+                      ? AppColors.yellow
                       : AppColors.getDivider(isDark),
                   size: 20,
                 ),
@@ -760,7 +705,7 @@ class _ToolsPageState extends State<ToolsPage> {
                   label,
                   style: TextStyle(
                     color: isEnabled
-                        ? AppColors.getPrimary(isDark)
+                        ? AppColors.yellow
                         : AppColors.getDivider(isDark),
                     fontWeight: FontWeight.w600,
                   ),
@@ -794,21 +739,13 @@ class _ToolsPageState extends State<ToolsPage> {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 4),
           decoration: BoxDecoration(
-            gradient: isCurrentPage
-                ? LinearGradient(
-                    colors: [
-                      AppColors.getPrimary(isDark),
-                      AppColors.getPrimary(isDark).withOpacity(0.8),
-                    ],
-                  )
-                : null,
-            color: !isCurrentPage
-                ? AppColors.getDivider(isDark).withOpacity(0.1)
-                : null,
+            color: isCurrentPage
+                ? AppColors.yellow
+                : AppColors.getDivider(isDark).withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color: isCurrentPage
-                  ? AppColors.getPrimary(isDark)
+                  ? AppColors.yellow
                   : AppColors.getDivider(isDark).withOpacity(0.3),
             ),
           ),
@@ -825,7 +762,7 @@ class _ToolsPageState extends State<ToolsPage> {
                   '${i + 1}',
                   style: TextStyle(
                     color: isCurrentPage
-                        ? (isDark ? Colors.white : Colors.black)
+                        ? Colors.black
                         : AppColors.getTextColor(isDark),
                     fontWeight: isCurrentPage
                         ? FontWeight.bold
@@ -916,10 +853,12 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
   }
 
   Widget _buildHeader(bool isDark) {
+    final textColor = AppColors.getTextColor(isDark);
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.getPrimary(isDark).withOpacity(0.1),
+        color: AppColors.yellow.withOpacity(0.1),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         border: Border(bottom: BorderSide(color: AppColors.getDivider(isDark))),
       ),
@@ -933,7 +872,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                   'Tool Details',
                   style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.getTextColor(isDark).withOpacity(0.7),
+                    color: textColor.withOpacity(0.7),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -942,7 +881,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.getTextColor(isDark),
+                    color: textColor,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -973,9 +912,8 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
               title: 'Vendor',
               content: widget.tool.vendor,
               icon: Icons.business,
-              color: AppColors.accent,
+              color: AppColors.yellow,
             ),
-
           if (widget.tool.vendor.isNotEmpty) const SizedBox(height: 16),
 
           // Description
@@ -987,17 +925,14 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
               icon: Icons.description,
               color: AppColors.success,
             ),
-
           if (widget.tool.description.isNotEmpty) const SizedBox(height: 16),
 
           // Images
           _buildImageSection(isDark),
-
           const SizedBox(height: 16),
 
           // Price
           _buildPriceCard(isDark),
-
           const SizedBox(height: 16),
 
           // Specifications
@@ -1014,6 +949,8 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
     required IconData icon,
     required Color color,
   }) {
+    final textColor = AppColors.getTextColor(isDark);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -1044,7 +981,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
             content,
             style: TextStyle(
               fontSize: 14,
-              color: AppColors.getTextColor(isDark),
+              color: textColor,
             ),
           ),
         ],
@@ -1073,23 +1010,23 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.purple.withOpacity(0.1),
+        color: AppColors.info.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.purple.withOpacity(0.3)),
+        border: Border.all(color: AppColors.info.withOpacity(0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.photo_library, color: Colors.purple, size: 20),
+              Icon(Icons.photo_library, color: AppColors.info, size: 20),
               const SizedBox(width: 8),
               Text(
                 'Images (${availableImages.length})',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.purple,
+                  color: AppColors.info,
                 ),
               ),
               const Spacer(),
@@ -1100,7 +1037,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.purple.withOpacity(0.2),
+                    color: AppColors.info.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -1108,7 +1045,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: Colors.purple,
+                      color: AppColors.info,
                     ),
                   ),
                 ),
@@ -1163,7 +1100,8 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                   child: Center(
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.purple),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppColors.info),
                     ),
                   ),
                 ),
@@ -1182,9 +1120,8 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                         'Image failed to load',
                         style: TextStyle(
                           fontSize: 12,
-                          color: AppColors.getTextColor(
-                            isDark,
-                          ).withOpacity(0.6),
+                          color:
+                              AppColors.getTextColor(isDark).withOpacity(0.6),
                         ),
                       ),
                     ],
@@ -1199,6 +1136,8 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
   }
 
   Widget _buildNoImagesPlaceholder(bool isDark) {
+    final textColor = AppColors.getTextColor(isDark);
+
     return Container(
       height: 200,
       decoration: BoxDecoration(
@@ -1221,7 +1160,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
             'No images available',
             style: TextStyle(
               fontSize: 16,
-              color: AppColors.getTextColor(isDark).withOpacity(0.6),
+              color: textColor.withOpacity(0.6),
             ),
           ),
         ],
@@ -1230,6 +1169,8 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
   }
 
   Widget _buildPriceCard(bool isDark) {
+    final textColor = AppColors.getTextColor(isDark);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -1261,7 +1202,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.getTextColor(isDark),
+              color: textColor,
             ),
           ),
         ],
@@ -1270,27 +1211,29 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
   }
 
   Widget _buildSpecificationsSection(bool isDark) {
+    final textColor = AppColors.getTextColor(isDark);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.1),
+        color: AppColors.yellow.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+        border: Border.all(color: AppColors.yellow.withOpacity(0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.settings, color: AppColors.primary, size: 20),
+              Icon(Icons.settings, color: AppColors.yellow, size: 20),
               const SizedBox(width: 8),
               Text(
                 'Specifications',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: AppColors.yellow,
                 ),
               ),
             ],
@@ -1305,7 +1248,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.getTextColor(isDark),
+                  color: textColor,
                 ),
               ),
               Container(
@@ -1340,7 +1283,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.getTextColor(isDark),
+                    color: textColor,
                   ),
                 ),
                 Container(
@@ -1370,6 +1313,8 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
   }
 
   Widget _buildActions(bool isDark) {
+    final textColor = AppColors.getTextColor(isDark);
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -1382,7 +1327,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.getTextColor(isDark),
+                  color: textColor,
                 ),
               ),
               const Spacer(),
@@ -1394,12 +1339,11 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                 child: Row(
                   children: [
                     IconButton(
-                      onPressed: _quantity > 1
-                          ? () => setState(() => _quantity--)
-                          : null,
+                      onPressed:
+                          _quantity > 1 ? () => setState(() => _quantity--) : null,
                       icon: Icon(Icons.remove),
                       color: _quantity > 1
-                          ? AppColors.getTextColor(isDark)
+                          ? textColor
                           : AppColors.getDivider(isDark),
                     ),
                     Container(
@@ -1409,14 +1353,14 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.getTextColor(isDark),
+                          color: textColor,
                         ),
                       ),
                     ),
                     IconButton(
                       onPressed: () => setState(() => _quantity++),
                       icon: Icon(Icons.add),
-                      color: AppColors.getTextColor(isDark),
+                      color: textColor,
                     ),
                   ],
                 ),
@@ -1432,9 +1376,9 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
               onPressed: widget.tool.isInStock ? _addToCart : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: widget.tool.isInStock
-                    ? AppColors.primary
+                    ? AppColors.yellow
                     : AppColors.getDivider(isDark),
-                foregroundColor: Colors.white,
+                foregroundColor: Colors.black,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -1482,4 +1426,3 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
     }
   }
 }
-
