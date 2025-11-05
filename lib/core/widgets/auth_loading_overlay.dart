@@ -45,32 +45,11 @@ class AuthLoadingOverlay extends StatelessWidget {
                   children: [
                     // Animated Logo
                     Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            gradient: RadialGradient(
-                              colors: [
-                                AppColors.primary.withOpacity(0.2),
-                                AppColors.primary.withOpacity(0.05),
-                                Colors.transparent,
-                              ],
-                            ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.1),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppColors.primary.withOpacity(0.3),
-                                width: 2,
-                              ),
-                            ),
-                            child: Icon(
-                              Icons.car_repair_rounded,
-                              size: 48,
-                              color: AppColors.primary,
-                            ),
+                          width: 120,
+                          height: 120,
+                          child: Image.asset(
+                            'assets/logo1.png',
+                            fit: BoxFit.contain,
                           ),
                         )
                         .animate(onPlay: (controller) => controller.repeat())

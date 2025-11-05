@@ -1,4 +1,15 @@
 {
+  "common": {
+    "back": "رجوع",
+    "loading": "جاري التحميل...",
+    "please_wait": "يرجى الانتظار",
+    "retry": "إعادة المحاولة",
+    "error": "خطأ",
+    "success": "نجح",
+    "ok": "موافق",
+    "cancel": "إلغاء",
+    "coming_soon": "قريبًا"
+  },
   "welcome": {
     "title": "مرحباً بك في متجر قطع غيار السيارات",
     "subtitle": "استكشف أجود القطع المثالية لسيارتك",
@@ -96,6 +107,11 @@
       "setting_up_profile": "جاري إعداد ملفك الشخصي...",
       "please_wait": "يرجى الانتظار، قد يستغرق هذا لحظة"
     },
+    "photo_picker": {
+      "take_photo": "التقط صورة",
+      "choose_from_gallery": "اختر من المعرض",
+      "select_photo_source": "اختر مصدر الصورة"
+    },
     "city": "المدينة",
     "select_city": "اختر مدينة"
   },
@@ -122,6 +138,11 @@
     "sales": {
       "title": "العروض والخصومات",
       "subtitle": "اكتشف عروضاً مذهلة وخصومات خاصة",
+      "car_parts": "قطع السيارات",
+      "tools": "الأدوات",
+      "total_items": "إجمالي العناصر",
+      "no_car_parts": "لا توجد قطع سيارات معروضة",
+      "no_tools": "لا توجد أدوات معروضة",
       "flash_deals": "صفقات سريعة",
       "flash_deals_desc": "عروض محدودة الوقت مع خصومات كبيرة",
       "discounts": "خصومات",
@@ -209,12 +230,48 @@
     "tools": {
       "title": "الأدوات",
       "description": "أدوات تشخيص وصيانة السيارات",
-      "coming_soon": "قريباً"
+      "coming_soon": "قريباً",
+      "search_hint": "ابحث عن الأدوات...",
+      "loading": "جاري تحميل الأدوات...",
+      "error": "خطأ في تحميل الأدوات",
+      "retry": "إعادة المحاولة",
+      "no_tools_found": "لم يتم العثور على أدوات",
+      "tools_available": "أدوات متاحة",
+      "refresh": "تحديث",
+      "in_stock": "متوفر",
+      "out_of_stock": "غير متوفر",
+      "view_details": "عرض التفاصيل",
+      "vendor": "المورد",
+      "product_type": "نوع المنتج"
     },
     "cart": {
       "title": "سلة التسوق",
       "empty_message": "سلة التسوق فارغة",
-      "start_shopping": "ابدأ التسوق"
+      "start_shopping": "ابدأ التسوق",
+      "items_count": "منتجات في السلة",
+      "item_count": "منتج في السلة",
+      "subtotal": "المجموع الفرعي",
+      "total": "الإجمالي",
+      "checkout": "إتمام الطلب",
+      "checkout_short": "الدفع",
+      "quantity": "الكمية",
+      "remove": "إزالة",
+      "update": "تحديث",
+      "clear_cart": "إفراغ السلة",
+      "clear_all": "مسح الكل",
+      "item_removed": "تم إزالة المنتج من السلة",
+      "item_updated": "تم تحديث الكمية",
+      "cart_cleared": "تم إفراغ السلة",
+      "error_updating": "خطأ في تحديث الكمية",
+      "error_removing": "خطأ في إزالة المنتج",
+      "confirm_remove": "إزالة المنتج",
+      "confirm_remove_message": "هل أنت متأكد من إزالة هذا المنتج من السلة؟",
+      "confirm_clear": "إفراغ السلة",
+      "confirm_clear_message": "هل أنت متأكد من إزالة جميع المنتجات من السلة؟",
+      "part_number": "رقم القطعة",
+      "per_item": "للقطعة",
+      "checkout_coming_soon": "خدمة الدفع ستكون متاحة قريباً!",
+      "continue_shopping": "متابعة التسوق"
     },
     "settings": {
       "title": "الإعدادات",

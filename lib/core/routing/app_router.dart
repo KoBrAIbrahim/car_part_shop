@@ -13,7 +13,9 @@ import '../../features/user/pages/settings/help_page.dart';
 import '../../features/user/pages/car_details/car_details_page.dart';
 import '../../features/products/presentation/pages/category_selection_page.dart';
 import '../../features/user/pages/car_parts/part_details_page.dart';
+import '../../features/user/pages/tools/tool_details_page.dart';
 import '../api/models/car_part.dart';
+import '../api/models/tool_product.dart';
 
 class AppRouter {
   static const String welcome = '/';
@@ -34,8 +36,10 @@ class AppRouter {
   static const String carDetails = '/car-details/:carMake';
   static const String carParts = '/car-parts/:carId';
   static const String partDetails = '/part-details';
+  static const String toolDetails = '/tool-details';
 
   static final GoRouter router = GoRouter(
+    debugLogDiagnostics: true, // Enable debug logging
     routes: [
       GoRoute(
         path: welcome,
@@ -162,6 +166,22 @@ class AppRouter {
           return Scaffold(
             appBar: AppBar(title: const Text('Part Details')),
             body: const Center(child: Text('Part not found')),
+          );
+        },
+      ),
+      GoRoute(
+        path: toolDetails,
+        builder: (BuildContext context, GoRouterState state) {
+          // We expect the ToolProduct instance to be passed via state.extra
+          final extra = state.extra;
+          if (extra is ToolProduct) {
+            return ToolDetailsPage(tool: extra);
+          }
+
+          // Fallback UI when the tool was not passed correctly
+          return Scaffold(
+            appBar: AppBar(title: const Text('Tool Details')),
+            body: const Center(child: Text('Tool not found')),
           );
         },
       ),

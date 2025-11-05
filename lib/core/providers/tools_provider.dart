@@ -13,6 +13,7 @@ class ToolsProvider extends ChangeNotifier {
   int _totalToolsCount = 0;
   bool _hasMoreData = true;
   String _searchQuery = '';
+  String? _selectedSubcategory; // Track selected subcategory
   Timer? _refreshTimer;
   DateTime? _lastRefreshTime;
 
@@ -32,13 +33,17 @@ class ToolsProvider extends ChangeNotifier {
   int get currentPage => _currentPage;
   int get totalPages => _totalPages;
   String get searchQuery => _searchQuery;
+  String? get selectedSubcategory => _selectedSubcategory;
   DateTime? get lastRefreshTime => _lastRefreshTime;
   bool get isAutoRefreshActive => _refreshTimer?.isActive ?? false;
   bool get canGoToNextPage => _currentPage < _totalPages - 1;
   bool get canGoToPreviousPage => _currentPage > 0;
 
   /// Load tools (first page)
-  Future<void> loadTools({bool forceRefresh = false}) async {
+  Future<void> loadTools({
+    bool forceRefresh = false,
+    String? subcategory,
+  }) async {
     if (_isLoading) return;
 
     _isLoading = true;
@@ -46,22 +51,44 @@ class ToolsProvider extends ChangeNotifier {
     _currentPage = 0;
     _tools.clear();
     _hasMoreData = true;
+    _selectedSubcategory = subcategory;
     notifyListeners();
 
     try {
-      print('🔧 [TOOLS_PROVIDER] Loading tools (forceRefresh: $forceRefresh)');
-
-      // Get total count first
-      _totalToolsCount = await ToolsService.getTotalToolsCount();
-      _totalPages = (_totalToolsCount / _pageSize).ceil();
-
-      final newTools = await ToolsService.fetchToolsProducts(
-        page: _currentPage,
-        pageSize: _pageSize,
-        forceRefresh: forceRefresh,
+      print(
+        '🔧 [TOOLS_PROVIDER] Loading tools (forceRefresh: $forceRefresh, subcategory: $subcategory)',
       );
 
-      _tools = newTools;
+      if (subcategory != null && subcategory.toLowerCase() != 'all') {
+        // Load tools for specific subcategory
+        _totalToolsCount = await ToolsService.getToolsCountBySubcategory(
+          subcategory: subcategory,
+          forceRefresh: forceRefresh,
+        );
+        _totalPages = (_totalToolsCount / _pageSize).ceil();
+
+        final newTools = await ToolsService.fetchToolsBySubcategory(
+          subcategory: subcategory,
+          page: _currentPage,
+          pageSize: _pageSize,
+          forceRefresh: forceRefresh,
+        );
+
+        _tools = newTools;
+      } else {
+        // Load all tools
+        _totalToolsCount = await ToolsService.getTotalToolsCount();
+        _totalPages = (_totalToolsCount / _pageSize).ceil();
+
+        final newTools = await ToolsService.fetchToolsProducts(
+          page: _currentPage,
+          pageSize: _pageSize,
+          forceRefresh: forceRefresh,
+        );
+
+        _tools = newTools;
+      }
+
       _hasMoreData = _currentPage < _totalPages - 1;
 
       _lastRefreshTime = DateTime.now();
@@ -91,10 +118,20 @@ class ToolsProvider extends ChangeNotifier {
       final nextPage = _currentPage + 1;
       print('🔧 [TOOLS_PROVIDER] Loading page ${nextPage + 1}');
 
-      final newTools = await ToolsService.fetchToolsProducts(
-        page: nextPage,
-        pageSize: _pageSize,
-      );
+      List<ToolProduct> newTools;
+      if (_selectedSubcategory != null &&
+          _selectedSubcategory!.toLowerCase() != 'all') {
+        newTools = await ToolsService.fetchToolsBySubcategory(
+          subcategory: _selectedSubcategory!,
+          page: nextPage,
+          pageSize: _pageSize,
+        );
+      } else {
+        newTools = await ToolsService.fetchToolsProducts(
+          page: nextPage,
+          pageSize: _pageSize,
+        );
+      }
 
       _tools = newTools;
       _currentPage = nextPage;
@@ -124,10 +161,20 @@ class ToolsProvider extends ChangeNotifier {
       final prevPage = _currentPage - 1;
       print('🔧 [TOOLS_PROVIDER] Loading page ${prevPage + 1}');
 
-      final newTools = await ToolsService.fetchToolsProducts(
-        page: prevPage,
-        pageSize: _pageSize,
-      );
+      List<ToolProduct> newTools;
+      if (_selectedSubcategory != null &&
+          _selectedSubcategory!.toLowerCase() != 'all') {
+        newTools = await ToolsService.fetchToolsBySubcategory(
+          subcategory: _selectedSubcategory!,
+          page: prevPage,
+          pageSize: _pageSize,
+        );
+      } else {
+        newTools = await ToolsService.fetchToolsProducts(
+          page: prevPage,
+          pageSize: _pageSize,
+        );
+      }
 
       _tools = newTools;
       _currentPage = prevPage;
@@ -157,10 +204,20 @@ class ToolsProvider extends ChangeNotifier {
     try {
       print('🔧 [TOOLS_PROVIDER] Loading page ${page + 1}');
 
-      final newTools = await ToolsService.fetchToolsProducts(
-        page: page,
-        pageSize: _pageSize,
-      );
+      List<ToolProduct> newTools;
+      if (_selectedSubcategory != null &&
+          _selectedSubcategory!.toLowerCase() != 'all') {
+        newTools = await ToolsService.fetchToolsBySubcategory(
+          subcategory: _selectedSubcategory!,
+          page: page,
+          pageSize: _pageSize,
+        );
+      } else {
+        newTools = await ToolsService.fetchToolsProducts(
+          page: page,
+          pageSize: _pageSize,
+        );
+      }
 
       _tools = newTools;
       _currentPage = page;
@@ -312,6 +369,27 @@ class ToolsProvider extends ChangeNotifier {
   /// Get tools on sale
   List<ToolProduct> getToolsOnSale() {
     return _tools.where((tool) => tool.isOnSale).toList();
+  }
+
+  /// Get all subcategories (tags) from tools
+  Future<List<String>> getAllSubcategories({bool forceRefresh = false}) async {
+    try {
+      print('🔧 [TOOLS_PROVIDER] Fetching all subcategories');
+      final subcategories = await ToolsService.getAllSubcategories(
+        forceRefresh: forceRefresh,
+      );
+      print('✅ [TOOLS_PROVIDER] Found ${subcategories.length} subcategories');
+      return subcategories;
+    } catch (e) {
+      print('❌ [TOOLS_PROVIDER] Error fetching subcategories: $e');
+      return [];
+    }
+  }
+
+  /// Set selected subcategory and reload tools
+  Future<void> setSubcategory(String? subcategory) async {
+    if (_selectedSubcategory == subcategory) return;
+    await loadTools(subcategory: subcategory);
   }
 
   @override

@@ -59,44 +59,80 @@ class _GarageOwnerSignupPageState extends State<GarageOwnerSignupPage> {
   Future<void> _pickGaragePhoto() async {
     showModalBottomSheet(
       context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (BuildContext context) {
         return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: const Text('Take Photo'),
-                onTap: () async {
-                  Navigator.pop(context);
-                  final authProvider = context.read<AuthProvider>();
-                  final image = await authProvider.pickImage(
-                    source: ImageSource.camera,
-                  );
-                  if (image != null) {
-                    setState(() {
-                      _garagePhoto = image;
-                    });
-                  }
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Choose from Gallery'),
-                onTap: () async {
-                  Navigator.pop(context);
-                  final authProvider = context.read<AuthProvider>();
-                  final image = await authProvider.pickImage(
-                    source: ImageSource.gallery,
-                  );
-                  if (image != null) {
-                    setState(() {
-                      _garagePhoto = image;
-                    });
-                  }
-                },
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Text(
+                    'auth.photo_picker.select_photo_source'.tr(),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.photo_camera,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  title: Text('auth.photo_picker.take_photo'.tr()),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final authProvider = context.read<AuthProvider>();
+                    final image = await authProvider.pickImage(
+                      source: ImageSource.camera,
+                    );
+                    if (image != null) {
+                      setState(() {
+                        _garagePhoto = image;
+                      });
+                    }
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      Icons.photo_library,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                  title: Text('auth.photo_picker.choose_from_gallery'.tr()),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final authProvider = context.read<AuthProvider>();
+                    final image = await authProvider.pickImage(
+                      source: ImageSource.gallery,
+                    );
+                    if (image != null) {
+                      setState(() {
+                        _garagePhoto = image;
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },

@@ -184,9 +184,7 @@ class _ToolsPageState extends State<ToolsPage> {
 
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: cardBg,
-      ),
+      decoration: BoxDecoration(color: cardBg),
       child: Container(
         decoration: BoxDecoration(
           color: surfaceBg,
@@ -207,19 +205,14 @@ class _ToolsPageState extends State<ToolsPage> {
           onChanged: _onSearchChanged,
           decoration: InputDecoration(
             hintText: 'Search tools...',
-            hintStyle: TextStyle(
-              color: textColor.withOpacity(0.6),
-            ),
+            hintStyle: TextStyle(color: textColor.withOpacity(0.6)),
             prefixIcon: Container(
               margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: AppColors.yellow.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
-                Icons.search_rounded,
-                color: AppColors.yellow,
-              ),
+              child: Icon(Icons.search_rounded, color: AppColors.yellow),
             ),
             suffixIcon: _searchController.text.isNotEmpty
                 ? Container(
@@ -490,9 +483,7 @@ class _ToolsPageState extends State<ToolsPage> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                AppColors.yellow,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.yellow),
             ),
           ),
           const SizedBox(height: 24),
@@ -540,9 +531,7 @@ class _ToolsPageState extends State<ToolsPage> {
           const SizedBox(height: 8),
           Text(
             provider.error ?? 'Unknown error',
-            style: TextStyle(
-              color: textColor.withOpacity(0.7),
-            ),
+            style: TextStyle(color: textColor.withOpacity(0.7)),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
@@ -591,9 +580,7 @@ class _ToolsPageState extends State<ToolsPage> {
           const SizedBox(height: 8),
           Text(
             'No tools are currently available',
-            style: TextStyle(
-              color: textColor.withOpacity(0.7),
-            ),
+            style: TextStyle(color: textColor.withOpacity(0.7)),
           ),
         ],
       ),
@@ -952,13 +939,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            content,
-            style: TextStyle(
-              fontSize: 14,
-              color: textColor,
-            ),
-          ),
+          Text(content, style: TextStyle(fontSize: 14, color: textColor)),
         ],
       ),
     );
@@ -1132,8 +1113,9 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                 child: Row(
                   children: [
                     IconButton(
-                      onPressed:
-                          _quantity > 1 ? () => setState(() => _quantity--) : null,
+                      onPressed: _quantity > 1
+                          ? () => setState(() => _quantity--)
+                          : null,
                       icon: Icon(Icons.remove),
                       color: _quantity > 1
                           ? textColor

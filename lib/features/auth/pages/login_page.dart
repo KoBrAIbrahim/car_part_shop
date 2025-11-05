@@ -469,7 +469,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                         children: [
                                           SizedBox(height: screenHeight * 0.02),
 
-                                          // Logo with pulse animation (smaller size)
+                                          // Logo with pulse animation (circular logo1)
                                           AnimatedBuilder(
                                             animation: _pulseAnimation,
                                             builder: (context, child) {
@@ -493,13 +493,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                                     shape: BoxShape.circle,
                                                   ),
                                                   child: Container(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                          12,
-                                                        ),
+                                                    width: 100,
+                                                    height: 100,
                                                     decoration: BoxDecoration(
-                                                      color: AppColors
-                                                          .cardBackground, // Use class color instead of Colors.white
+                                                      color: Colors.white,
                                                       shape: BoxShape.circle,
                                                       boxShadow: [
                                                         BoxShadow(
@@ -514,10 +511,11 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                                         ),
                                                       ],
                                                     ),
-                                                    child: Icon(
-                                                      Icons.car_repair_rounded,
-                                                      size: 40,
-                                                      color: AppColors.primary,
+                                                    child: ClipOval(
+                                                      child: Image.asset(
+                                                        'assets/logo1.png',
+                                                        fit: BoxFit.cover,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

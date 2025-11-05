@@ -9,6 +9,7 @@ import 'features/auth/auth_provider.dart';
 import 'core/providers/car_makes_provider.dart';
 import 'core/providers/car_parts_provider.dart';
 import 'core/providers/tools_provider.dart';
+import 'core/providers/sales_provider.dart';
 import 'core/services/hive_storage_service.dart';
 import 'core/services/cart_service.dart';
 
@@ -78,6 +79,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CarMakesProvider()),
         ChangeNotifierProvider(create: (_) => CarPartsProvider()),
         ChangeNotifierProvider(create: (_) => ToolsProvider()),
+        ChangeNotifierProvider(create: (_) => SalesProvider()),
       ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {

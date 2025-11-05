@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../widgets/main_layout_widget.dart';
 import 'homepage/home_page.dart';
-import 'tools/tools_page.dart';
+import 'tools/subcategory_tools_page.dart';
 import 'cart/cart_page.dart';
 import 'sales/sales_page.dart';
 import 'settings/settings_page.dart';
@@ -27,7 +27,7 @@ class _UserDashboardState extends State<UserDashboard> {
 
   final List<Widget> _pages = [
     const HomePage(),
-    const ToolsPage(),
+    const SubcategoryToolsPage(),
     const SalesPage(),
     const CartPage(),
     const AdvancedSettingsPage(),

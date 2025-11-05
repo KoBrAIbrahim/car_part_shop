@@ -1,4 +1,15 @@
 {
+  "common": {
+    "back": "Back",
+    "loading": "Loading...",
+    "please_wait": "Please wait",
+    "retry": "Retry",
+    "error": "Error",
+    "success": "Success",
+    "ok": "OK",
+    "cancel": "Cancel",
+    "coming_soon": "Coming Soon"
+  },
   "welcome": {
     "title": "Welcome to Car Parts Shop",
     "subtitle": "Find the perfect parts for your vehicle",
@@ -94,6 +105,11 @@
       "setting_up_profile": "Setting up your profile...",
       "please_wait": "Please wait, this may take a moment"
     },
+    "photo_picker": {
+      "take_photo": "Take Photo",
+      "choose_from_gallery": "Choose from Gallery",
+      "select_photo_source": "Select Photo Source"
+    },
     "city": "City",
     "select_city": "Select a city",
     "auth": {
@@ -124,6 +140,11 @@
     "sales": {
       "title": "Sales & Offers",
       "subtitle": "Discover amazing deals and special offers",
+      "car_parts": "Car Parts",
+      "tools": "Tools",
+      "total_items": "Total Items",
+      "no_car_parts": "No car parts on sale",
+      "no_tools": "No tools on sale",
       "flash_deals": "Flash Deals",
       "flash_deals_desc": "Limited time offers with huge discounts",
       "discounts": "Discounts",
@@ -155,12 +176,39 @@
       "tools_available": "tools available",
       "refresh": "Refresh",
       "in_stock": "In Stock",
-      "out_of_stock": "Out of Stock"
+      "out_of_stock": "Out of Stock",
+      "view_details": "View Details",
+      "vendor": "Vendor",
+      "product_type": "Product Type"
     },
     "cart": {
       "title": "My Cart",
       "empty_message": "Your cart is empty",
-      "start_shopping": "Start Shopping"
+      "start_shopping": "Start Shopping",
+      "items_count": "items in cart",
+      "item_count": "item in cart",
+      "subtotal": "Subtotal",
+      "total": "Total",
+      "checkout": "Proceed to Checkout",
+      "checkout_short": "Checkout",
+      "quantity": "Quantity",
+      "remove": "Remove",
+      "update": "Update",
+      "clear_cart": "Clear Cart",
+      "clear_all": "Clear All",
+      "item_removed": "Item removed from cart",
+      "item_updated": "Quantity updated",
+      "cart_cleared": "Cart cleared",
+      "error_updating": "Error updating quantity",
+      "error_removing": "Error removing item",
+      "confirm_remove": "Remove Item",
+      "confirm_remove_message": "Are you sure you want to remove this item from your cart?",
+      "confirm_clear": "Clear Cart",
+      "confirm_clear_message": "Are you sure you want to remove all items from your cart?",
+      "part_number": "Part#",
+      "per_item": "per item",
+      "checkout_coming_soon": "Checkout functionality coming soon!",
+      "continue_shopping": "Continue Shopping"
     },
     "car_details": {
       "title": "Car Details",

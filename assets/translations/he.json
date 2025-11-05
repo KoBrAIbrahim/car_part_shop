@@ -89,6 +89,11 @@
       "setting_up_profile": "מגדיר את הפרופיל שלך...",
       "please_wait": "אנא המתן, זה עלול לקחת רגע"
     },
+    "photo_picker": {
+      "take_photo": "צלם תמונה",
+      "choose_from_gallery": "בחר מהגלריה",
+      "select_photo_source": "בחר מקור תמונה"
+    },
     "city": "עיר",
     "select_city": "בחר עיר",
     "auth": {

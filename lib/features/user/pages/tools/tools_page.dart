@@ -8,7 +8,8 @@ import '../../../../core/providers/theme_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/api/models/tool_product.dart';
 import '../../../../core/services/cart_service.dart';
-import '../../../auth/auth_provider.dart';
+import '../../../../core/routing/app_router.dart';
+import '../../widgets/app_header_widget.dart';
 
 class ToolsPage extends StatefulWidget {
   const ToolsPage({super.key});
@@ -27,9 +28,11 @@ class _ToolsPageState extends State<ToolsPage> {
     super.initState();
     _toolsProvider = Provider.of<ToolsProvider>(context, listen: false);
 
-    // Load tools when page opens
+    // Load tools when page opens only if not already loaded from subcategory page
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _toolsProvider.loadTools();
+      if (_toolsProvider.tools.isEmpty) {
+        _toolsProvider.loadTools();
+      }
     });
   }
 
@@ -59,11 +62,11 @@ class _ToolsPageState extends State<ToolsPage> {
 
         return Scaffold(
           backgroundColor: AppColors.getBackground(isDark),
+          appBar: AppHeaderWidget(
+            title: 'user.tools.title',
+          ),
           body: Column(
             children: [
-              // Header
-              _buildHeader(isDark),
-
               // Search Bar
               _buildSearchBar(isDark),
 
@@ -79,172 +82,88 @@ class _ToolsPageState extends State<ToolsPage> {
     );
   }
 
-  Widget _buildHeader(bool isDark) {
-    final cardBg = AppColors.getCardBackground(isDark);
+  Widget _buildSearchBar(bool isDark) {
     final textColor = AppColors.getTextColor(isDark);
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: cardBg,
-        boxShadow: [
-          BoxShadow(
-            color: isDark
-                ? Colors.black.withOpacity(0.2)
-                : Colors.grey.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+    return SafeArea(
+      bottom: false,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.getCardBackground(isDark),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: _searchController.text.isNotEmpty
+                  ? AppColors.yellow
+                  : AppColors.getDivider(isDark),
+              width: 1,
+            ),
+            boxShadow: _searchController.text.isNotEmpty
+                ? [
+                    BoxShadow(
+                      color: AppColors.yellow.withOpacity(0.2),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : null,
           ),
-        ],
-      ),
-      child: Consumer<ToolsProvider>(
-        builder: (context, provider, child) {
-          final totalTools = provider.totalTools;
-          final hasActiveSearch = provider.searchQuery.isNotEmpty;
-
-          return Row(
-            children: [
-              // Tools Icon
-              Container(
-                padding: const EdgeInsets.all(12),
+          child: TextField(
+            controller: _searchController,
+            onChanged: _onSearchChanged,
+            style: TextStyle(
+              color: textColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            decoration: InputDecoration(
+              hintText: 'user.tools.search_hint'.tr(),
+              hintStyle: TextStyle(
+                color: textColor.withOpacity(0.4),
+                fontSize: 16,
+              ),
+              prefixIcon: Container(
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.yellow.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.yellow.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
-                  Icons.build_rounded,
+                  Icons.search_rounded,
                   color: AppColors.yellow,
                   size: 24,
                 ),
               ),
-              const SizedBox(width: 16),
-
-              // Title and Count
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'user.tools.title'.tr(),
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: textColor,
-                      ),
-                    ),
-                    if (provider.hasData) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        hasActiveSearch
-                            ? '${provider.tools.length} tools found for "${provider.searchQuery}"'
-                            : 'Page ${provider.currentPage + 1} of ${provider.totalPages} ($totalTools total)',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: textColor.withOpacity(0.7),
+              suffixIcon: _searchController.text.isNotEmpty
+                  ? IconButton(
+                      icon: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: AppColors.error.withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.close_rounded,
+                          color: AppColors.error,
+                          size: 18,
                         ),
                       ),
-                    ],
-                  ],
-                ),
-              ),
-
-              // Refresh Button
-              if (provider.hasData)
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.yellow.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: IconButton(
-                    onPressed: provider.isLoading ? null : provider.refresh,
-                    icon: provider.isLoading
-                        ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                AppColors.yellow,
-                              ),
-                            ),
-                          )
-                        : Icon(Icons.refresh_rounded, color: AppColors.yellow),
-                  ),
-                ),
-            ],
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildSearchBar(bool isDark) {
-    final cardBg = AppColors.getCardBackground(isDark);
-    final surfaceBg = AppColors.getSurface(isDark);
-    final textColor = AppColors.getTextColor(isDark);
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: cardBg,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: surfaceBg,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: AppColors.getDivider(isDark).withOpacity(0.3),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.yellow.withOpacity(0.1),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: TextField(
-          controller: _searchController,
-          onChanged: _onSearchChanged,
-          decoration: InputDecoration(
-            hintText: 'Search tools...',
-            hintStyle: TextStyle(
-              color: textColor.withOpacity(0.6),
-            ),
-            prefixIcon: Container(
-              margin: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.yellow.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                Icons.search_rounded,
-                color: AppColors.yellow,
-              ),
-            ),
-            suffixIcon: _searchController.text.isNotEmpty
-                ? Container(
-                    margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.error.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.clear_rounded, color: AppColors.error),
                       onPressed: () {
                         _searchController.clear();
                         _toolsProvider.clearSearch();
+                        setState(() {});
                       },
-                    ),
-                  )
-                : null,
-            border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 16,
+                    )
+                  : null,
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
             ),
           ),
-          style: TextStyle(color: textColor, fontSize: 16),
         ),
       ),
     );
@@ -278,20 +197,12 @@ class _ToolsPageState extends State<ToolsPage> {
               crossAxisCount: 2, // 2 products per row
               crossAxisSpacing: 16,
               mainAxisSpacing: 16,
-              childAspectRatio: 0.75, // Adjust height ratio
+              childAspectRatio: 0.60, // Larger cards (taller)
             ),
             itemCount: tools.length, // Show exactly 10 items per page
             itemBuilder: (context, index) {
               final tool = tools[index];
-              return Consumer<AuthProvider>(
-                builder: (context, authProvider, child) {
-                  return _buildToolCard(
-                    tool: tool,
-                    isDark: isDark,
-                    isGarageOwner: authProvider.isGarageOwner(),
-                  );
-                },
-              );
+              return _buildToolCard(tool: tool, isDark: isDark);
             },
           ),
         );
@@ -299,167 +210,232 @@ class _ToolsPageState extends State<ToolsPage> {
     );
   }
 
-  Widget _buildToolCard({
-    required ToolProduct tool,
-    required bool isDark,
-    required bool isGarageOwner,
-  }) {
+  Widget _buildToolCard({required ToolProduct tool, required bool isDark}) {
     final cardBg = AppColors.getCardBackground(isDark);
     final textColor = AppColors.getTextColor(isDark);
+    final surfaceBg = AppColors.getSurface(isDark);
 
     return GestureDetector(
-      onTap: () => _showToolDetailsModal(tool),
+      onTap: () {
+        print('🔧 Navigating to tool details: ${tool.title}');
+        print('🔧 Route: ${AppRouter.toolDetails}');
+        print('🔧 Tool type: ${tool.runtimeType}');
+        context.push(AppRouter.toolDetails, extra: tool);
+      },
       child: Container(
         decoration: BoxDecoration(
           color: cardBg,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: AppColors.getDivider(isDark).withOpacity(0.3),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: isDark
-                  ? Colors.black.withOpacity(0.2)
-                  : Colors.grey.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.getDivider(isDark)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image
-            Expanded(
-              flex: 3,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColors.getDivider(isDark).withOpacity(0.1),
+            // Image - LARGER SIZE
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(14),
                   ),
-                  child: CachedNetworkImage(
-                    imageUrl: tool.displayImageUrl,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.yellow,
+                  child: AspectRatio(
+                    aspectRatio: 1.2, // Changed from 16/9 to make image taller
+                    child: CachedNetworkImage(
+                      imageUrl: tool.displayImageUrl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: surfaceBg,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              AppColors.yellow,
+                            ),
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: surfaceBg,
+                        child: Center(
+                          child: Icon(
+                            Icons.build_rounded,
+                            size: 48,
+                            color: textColor.withOpacity(0.3),
+                          ),
                         ),
                       ),
                     ),
-                    errorWidget: (context, url, error) => Container(
-                      color: AppColors.getDivider(isDark).withOpacity(0.1),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.build_rounded,
-                            size: 32,
-                            color: AppColors.getDivider(isDark),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'No Image',
-                            style: TextStyle(
-                              color: AppColors.getDivider(isDark),
-                              fontSize: 12,
-                            ),
+                  ),
+                ),
+                // Discount badge
+                if (tool.isOnSale && tool.salePercentage > 0)
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.error,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
+                      child: Text(
+                        '-${tool.salePercentage}%',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
+              ],
+            ),
+
+            // Yellow line under image
+            Container(
+              height: 4,
+              decoration: BoxDecoration(color: AppColors.yellow),
             ),
 
             // Content
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Title
-                    Text(
-                      tool.title,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: textColor,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Title
+                  Text(
+                    tool.title,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: textColor,
                     ),
-                    const SizedBox(height: 4),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
 
-                    // Vendor
-                    if (tool.vendor.isNotEmpty)
-                      Text(
-                        tool.vendor,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: textColor.withOpacity(0.7),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                  // Price and Stock Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Price
+                      Flexible(
+                        child: tool.isOnSale
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Discounted price
+                                  Text(
+                                    tool.displayPrice,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.error,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  // Original price with strikethrough
+                                  Text(
+                                    '₪${tool.compareAtPrice!.toStringAsFixed(0)}',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w500,
+                                      color: textColor.withOpacity(0.5),
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                tool.displayPrice,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.success,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                       ),
-
-                    const Spacer(),
-
-                    // Price and Stock
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Price
-                        Expanded(
-                          child: Text(
-                            tool.displayPrice,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: tool.isOnSale
-                                  ? AppColors.success
-                                  : textColor,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                      const SizedBox(width: 6),
+                      // Stock indicator
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 3,
                         ),
-
-                        // Stock indicator
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
+                        decoration: BoxDecoration(
+                          color: tool.isInStock
+                              ? AppColors.success.withOpacity(0.08)
+                              : AppColors.error.withOpacity(0.06),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
                             color: tool.isInStock
-                                ? AppColors.success.withOpacity(0.1)
-                                : AppColors.error.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            tool.isInStock ? 'In Stock' : 'Out of Stock',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: tool.isInStock
-                                  ? AppColors.success
-                                  : AppColors.error,
-                            ),
+                                ? AppColors.success
+                                : AppColors.error,
+                            width: 1,
                           ),
                         ),
-                      ],
+                        child: Text(
+                          tool.isInStock
+                              ? 'user.tools.in_stock'.tr()
+                              : 'user.tools.out_of_stock'.tr(),
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: tool.isInStock
+                                ? AppColors.success
+                                : AppColors.error,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // Add to Cart button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: tool.isInStock
+                          ? () => _addToolToCart(tool)
+                          : null,
+                      icon: Icon(Icons.shopping_cart_outlined, size: 16),
+                      label: Text('user.car_parts.add_to_cart'.tr()),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: tool.isInStock
+                            ? AppColors.yellow
+                            : AppColors.getDivider(isDark),
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                        ),
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -468,13 +444,156 @@ class _ToolsPageState extends State<ToolsPage> {
     );
   }
 
-  void _showToolDetailsModal(ToolProduct tool) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => ToolDetailsModal(tool: tool),
-    );
+  Future<void> _addToolToCart(ToolProduct tool) async {
+    try {
+      // Convert ToolProduct to CarPart for cart
+      // You might need to adjust this based on your actual CartService implementation
+      await CartService.addToolToCart(tool, quantity: 1);
+
+      if (!mounted) return;
+
+      // Show success dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext dialogContext) {
+          // Auto-close after 3 seconds
+          Future.delayed(const Duration(seconds: 3), () {
+            if (Navigator.canPop(dialogContext)) {
+              Navigator.of(dialogContext).pop();
+            }
+          });
+
+          final isDark = Provider.of<ThemeProvider>(
+            context,
+            listen: false,
+          ).isDarkMode;
+
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppColors.getCardBackground(isDark),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.yellow.withOpacity(0.3),
+                    blurRadius: 20,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Success icon
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: AppColors.yellow.withOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.check_circle_rounded,
+                      size: 50,
+                      color: AppColors.yellow,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Success message
+                  Text(
+                    'user.car_parts.added_to_cart'.tr(),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.getTextColor(isDark),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Product name
+                  Text(
+                    tool.title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.getTextColor(isDark).withOpacity(0.8),
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Quantity
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.yellow.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.yellow.withOpacity(0.3),
+                      ),
+                    ),
+                    child: Text(
+                      '${'user.car_parts.quantity'.tr()}: 1',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.getTextColor(isDark),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // View Cart button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(dialogContext).pop();
+                        context.go('/cart');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.yellow,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'user.car_parts.view_cart'.tr(),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('user.car_parts.error_adding_to_cart'.tr()),
+          backgroundColor: AppColors.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   Widget _buildLoadingState(bool isDark) {
@@ -491,14 +610,12 @@ class _ToolsPageState extends State<ToolsPage> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                AppColors.yellow,
-              ),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.yellow),
             ),
           ),
           const SizedBox(height: 24),
           Text(
-            'Loading tools...',
+            'user.tools.loading'.tr(),
             style: TextStyle(
               color: textColor,
               fontSize: 16,
@@ -531,7 +648,7 @@ class _ToolsPageState extends State<ToolsPage> {
           ),
           const SizedBox(height: 24),
           Text(
-            'Error loading tools',
+            'user.tools.error'.tr(),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -541,16 +658,14 @@ class _ToolsPageState extends State<ToolsPage> {
           const SizedBox(height: 8),
           Text(
             provider.error ?? 'Unknown error',
-            style: TextStyle(
-              color: textColor.withOpacity(0.7),
-            ),
+            style: TextStyle(color: textColor.withOpacity(0.7)),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
             onPressed: provider.refresh,
             icon: const Icon(Icons.refresh_rounded),
-            label: const Text('Retry'),
+            label: Text('user.tools.retry'.tr()),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.yellow,
               foregroundColor: Colors.black,
@@ -592,9 +707,7 @@ class _ToolsPageState extends State<ToolsPage> {
           const SizedBox(height: 8),
           Text(
             'No tools are currently available',
-            style: TextStyle(
-              color: textColor.withOpacity(0.7),
-            ),
+            style: TextStyle(color: textColor.withOpacity(0.7)),
           ),
         ],
       ),
@@ -612,45 +725,53 @@ class _ToolsPageState extends State<ToolsPage> {
         }
 
         final cardBg = AppColors.getCardBackground(isDark);
+        final textColor = AppColors.getTextColor(isDark);
+        final currentPage = provider.currentPage;
+        final totalPages = provider.totalPages;
 
         return Container(
-          padding: const EdgeInsets.all(16),
+          width: MediaQuery.of(context).size.width * 0.9, // 90% width
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           decoration: BoxDecoration(
             color: cardBg,
-            border: Border(
-              top: BorderSide(
-                color: AppColors.getDivider(isDark).withOpacity(0.3),
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.yellow.withOpacity(0.08),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
               ),
-            ),
+            ],
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Previous Button
-              _buildPaginationButton(
-                icon: Icons.chevron_left_rounded,
-                label: 'Previous',
+              // Previous button
+              _buildNavigationButton(
+                icon: Icons.arrow_back_ios_rounded,
                 onPressed: provider.canGoToPreviousPage && !provider.isLoading
                     ? provider.goToPreviousPage
                     : null,
                 isDark: isDark,
               ),
 
-              // Page Info and Numbers
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Page Numbers
-                    ..._buildPageNumbers(provider, isDark),
-                  ],
-                ),
+              const SizedBox(width: 4),
+
+              // Page numbers
+              ..._buildPageNumbers(
+                currentPage,
+                totalPages,
+                provider,
+                isDark,
+                textColor,
               ),
 
-              // Next Button
-              _buildPaginationButton(
-                icon: Icons.chevron_right_rounded,
-                label: 'Next',
+              const SizedBox(width: 4),
+
+              // Next button
+              _buildNavigationButton(
+                icon: Icons.arrow_forward_ios_rounded,
                 onPressed: provider.canGoToNextPage && !provider.isLoading
                     ? provider.goToNextPage
                     : null,
@@ -663,54 +784,152 @@ class _ToolsPageState extends State<ToolsPage> {
     );
   }
 
-  Widget _buildPaginationButton({
+  Widget _buildNavigationButton({
     required IconData icon,
-    required String label,
     required VoidCallback? onPressed,
     required bool isDark,
   }) {
     final isEnabled = onPressed != null;
 
     return Container(
+      width: 34,
+      height: 34,
       decoration: BoxDecoration(
         color: isEnabled
-            ? AppColors.yellow.withOpacity(0.2)
+            ? AppColors.yellow.withOpacity(0.15)
             : AppColors.getDivider(isDark).withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isEnabled
-              ? AppColors.yellow.withOpacity(0.3)
-              : AppColors.getDivider(isDark).withOpacity(0.3),
-        ),
+        shape: BoxShape.circle,
+        border: isEnabled
+            ? Border.all(color: AppColors.yellow.withOpacity(0.3), width: 1)
+            : null,
       ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  icon,
-                  color: isEnabled
-                      ? AppColors.yellow
-                      : AppColors.getDivider(isDark),
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: isEnabled
-                        ? AppColors.yellow
-                        : AppColors.getDivider(isDark),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+      child: IconButton(
+        onPressed: onPressed,
+        icon: Icon(
+          icon,
+          size: 14,
+          color: isEnabled
+              ? AppColors.yellow
+              : AppColors.getTextColor(isDark).withOpacity(0.3),
+        ),
+        padding: EdgeInsets.zero,
+      ),
+    );
+  }
+
+  List<Widget> _buildPageNumbers(
+    int currentPage,
+    int totalPages,
+    ToolsProvider provider,
+    bool isDark,
+    Color textColor,
+  ) {
+    List<Widget> pageWidgets = [];
+
+    // Always show first page
+    pageWidgets.add(
+      _buildPageButton(
+        pageNumber: 0,
+        currentPage: currentPage,
+        provider: provider,
+        isDark: isDark,
+        textColor: textColor,
+      ),
+    );
+
+    if (totalPages <= 5) {
+      // Show all pages if total is 5 or less
+      for (int i = 1; i < totalPages; i++) {
+        pageWidgets.add(const SizedBox(width: 4));
+        pageWidgets.add(
+          _buildPageButton(
+            pageNumber: i,
+            currentPage: currentPage,
+            provider: provider,
+            isDark: isDark,
+            textColor: textColor,
+          ),
+        );
+      }
+    } else {
+      // Show ellipsis logic for more than 5 pages
+      if (currentPage > 1) {
+        pageWidgets.add(const SizedBox(width: 4));
+        pageWidgets.add(_buildEllipsis(textColor));
+      }
+
+      // Show current page only if not first or last
+      if (currentPage > 0 && currentPage < totalPages - 1) {
+        pageWidgets.add(const SizedBox(width: 4));
+        pageWidgets.add(
+          _buildPageButton(
+            pageNumber: currentPage,
+            currentPage: currentPage,
+            provider: provider,
+            isDark: isDark,
+            textColor: textColor,
+          ),
+        );
+      }
+
+      if (currentPage < totalPages - 2) {
+        pageWidgets.add(const SizedBox(width: 4));
+        pageWidgets.add(_buildEllipsis(textColor));
+      }
+
+      // Always show last page
+      if (totalPages > 1) {
+        pageWidgets.add(const SizedBox(width: 4));
+        pageWidgets.add(
+          _buildPageButton(
+            pageNumber: totalPages - 1,
+            currentPage: currentPage,
+            provider: provider,
+            isDark: isDark,
+            textColor: textColor,
+          ),
+        );
+      }
+    }
+
+    return pageWidgets;
+  }
+
+  Widget _buildPageButton({
+    required int pageNumber,
+    required int currentPage,
+    required ToolsProvider provider,
+    required bool isDark,
+    required Color textColor,
+  }) {
+    final isCurrentPage = pageNumber == currentPage;
+
+    return GestureDetector(
+      onTap: !provider.isLoading ? () => provider.goToPage(pageNumber) : null,
+      child: Container(
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          color: isCurrentPage
+              ? Colors.transparent
+              : AppColors.getDivider(isDark).withOpacity(0.05),
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isCurrentPage
+                ? AppColors.yellow
+                : AppColors.getDivider(isDark).withOpacity(0.2),
+            width: isCurrentPage ? 2 : 1,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            '${pageNumber + 1}',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: isCurrentPage ? FontWeight.bold : FontWeight.w500,
+              color: isCurrentPage
+                  ? AppColors.yellow
+                  : textColor.withOpacity(0.7),
             ),
           ),
         ),
@@ -718,65 +937,20 @@ class _ToolsPageState extends State<ToolsPage> {
     );
   }
 
-  List<Widget> _buildPageNumbers(ToolsProvider provider, bool isDark) {
-    final currentPage = provider.currentPage;
-    final totalPages = provider.totalPages;
-    final List<Widget> pageNumbers = [];
-
-    // Show max 5 page numbers
-    int startPage = (currentPage - 2).clamp(0, totalPages - 1);
-    int endPage = (startPage + 4).clamp(0, totalPages - 1);
-
-    // Adjust start if we're near the end
-    if (endPage - startPage < 4) {
-      startPage = (endPage - 4).clamp(0, totalPages - 1);
-    }
-
-    for (int i = startPage; i <= endPage; i++) {
-      final isCurrentPage = i == currentPage;
-
-      pageNumbers.add(
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4),
-          decoration: BoxDecoration(
-            color: isCurrentPage
-                ? AppColors.yellow
-                : AppColors.getDivider(isDark).withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: isCurrentPage
-                  ? AppColors.yellow
-                  : AppColors.getDivider(isDark).withOpacity(0.3),
-            ),
-          ),
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: provider.isLoading ? null : () => provider.goToPage(i),
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                width: 40,
-                height: 40,
-                alignment: Alignment.center,
-                child: Text(
-                  '${i + 1}',
-                  style: TextStyle(
-                    color: isCurrentPage
-                        ? Colors.black
-                        : AppColors.getTextColor(isDark),
-                    fontWeight: isCurrentPage
-                        ? FontWeight.bold
-                        : FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ),
+  Widget _buildEllipsis(Color textColor) {
+    return Container(
+      width: 26,
+      height: 32,
+      alignment: Alignment.center,
+      child: Text(
+        '...',
+        style: TextStyle(
+          fontSize: 13,
+          color: textColor.withOpacity(0.4),
+          fontWeight: FontWeight.bold,
         ),
-      );
-    }
-
-    return pageNumbers;
+      ),
+    );
   }
 }
 
@@ -977,13 +1151,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            content,
-            style: TextStyle(
-              fontSize: 14,
-              color: textColor,
-            ),
-          ),
+          Text(content, style: TextStyle(fontSize: 14, color: textColor)),
         ],
       ),
     );
@@ -1100,8 +1268,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                   child: Center(
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(AppColors.info),
+                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.info),
                     ),
                   ),
                 ),
@@ -1120,8 +1287,9 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                         'Image failed to load',
                         style: TextStyle(
                           fontSize: 12,
-                          color:
-                              AppColors.getTextColor(isDark).withOpacity(0.6),
+                          color: AppColors.getTextColor(
+                            isDark,
+                          ).withOpacity(0.6),
                         ),
                       ),
                     ],
@@ -1158,10 +1326,7 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
           const SizedBox(height: 16),
           Text(
             'No images available',
-            style: TextStyle(
-              fontSize: 16,
-              color: textColor.withOpacity(0.6),
-            ),
+            style: TextStyle(fontSize: 16, color: textColor.withOpacity(0.6)),
           ),
         ],
       ),
@@ -1339,8 +1504,9 @@ class _ToolDetailsModalState extends State<ToolDetailsModal> {
                 child: Row(
                   children: [
                     IconButton(
-                      onPressed:
-                          _quantity > 1 ? () => setState(() => _quantity--) : null,
+                      onPressed: _quantity > 1
+                          ? () => setState(() => _quantity--)
+                          : null,
                       icon: Icon(Icons.remove),
                       color: _quantity > 1
                           ? textColor

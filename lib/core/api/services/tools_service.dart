@@ -33,7 +33,7 @@ class ToolsService {
   }) async {
     try {
       print(
-        '🔧 [TOOLS] Fetching tools products (page: $page, pageSize: $pageSize)',
+        '🔧 [TOOLS] Fetching tools products (page: ${page + 1}, pageSize: $pageSize)',
       );
 
       // Skip if not configured
@@ -42,8 +42,19 @@ class ToolsService {
         return [];
       }
 
-      // For proper pagination, we need to fetch all products first and then slice them
-      // This is because Shopify's since_id is not suitable for offset-based pagination
+      // Try to get from cache first (much faster)
+      if (!forceRefresh) {
+        final cachedTools = await _getPagedCachedTools(page, pageSize);
+        if (cachedTools.isNotEmpty) {
+          print(
+            '✅ [TOOLS] Returning ${cachedTools.length} cached tools for page ${page + 1}',
+          );
+          return cachedTools;
+        }
+      }
+
+      // If cache miss or force refresh, fetch all tools and cache them
+      print('🌐 [TOOLS] Cache miss or refresh - fetching from Shopify...');
       final allTools = await _fetchAllToolsFromShopify(
         forceRefresh: forceRefresh,
       );
@@ -54,7 +65,7 @@ class ToolsService {
 
       if (startIndex >= allTools.length) {
         print(
-          '✅ [TOOLS] Page $page is beyond available data, returning empty list',
+          '✅ [TOOLS] Page ${page + 1} is beyond available data, returning empty list',
         );
         return [];
       }
@@ -62,7 +73,7 @@ class ToolsService {
       final pageTools = allTools.sublist(startIndex, endIndex);
 
       print(
-        '✅ [TOOLS] Returning ${pageTools.length} tools for page ${page + 1} (items ${startIndex + 1}-${endIndex})',
+        '✅ [TOOLS] Returning ${pageTools.length} tools for page ${page + 1} (items ${startIndex + 1}-${endIndex} of ${allTools.length})',
       );
       return pageTools;
     } catch (e) {
@@ -142,7 +153,9 @@ class ToolsService {
           );
           toolProducts.add(toolProduct);
 
-          print('✅ [TOOLS] Added tool: ${toolProduct.title}');
+          print(
+            '✅ [TOOLS] Added tool: ${toolProduct.title} | Subcategory: ${toolProduct.subcategory ?? "NONE"}',
+          );
         }
       }
     }
@@ -239,6 +252,122 @@ class ToolsService {
     }
   }
 
+  /// Get all unique subcategories from tools (from metafield)
+  static Future<List<String>> getAllSubcategories({
+    bool forceRefresh = false,
+  }) async {
+    try {
+      print('🔧 [TOOLS] Fetching all subcategories from metafields');
+
+      // Get all tools first
+      final allTools = await fetchAllToolsProducts(forceRefresh: forceRefresh);
+
+      print('🔧 [TOOLS] Total tools fetched: ${allTools.length}');
+
+      // Extract unique subcategories from metafield
+      final Set<String> uniqueSubcategories = {};
+      for (final tool in allTools) {
+        if (tool.subcategory != null && tool.subcategory!.isNotEmpty) {
+          print(
+            '🔧 [TOOLS] Tool "${tool.title}" has subcategory: ${tool.subcategory}',
+          );
+          uniqueSubcategories.add(tool.subcategory!);
+        }
+      }
+
+      final subcategories = uniqueSubcategories.toList()..sort();
+      print(
+        '✅ [TOOLS] Found ${subcategories.length} unique subcategories: $subcategories',
+      );
+      return subcategories;
+    } catch (e) {
+      print('❌ [TOOLS] Error fetching subcategories: $e');
+      return [];
+    }
+  }
+
+  /// Fetch tools by subcategory (from metafield)
+  static Future<List<ToolProduct>> fetchToolsBySubcategory({
+    required String subcategory,
+    int page = 0,
+    int pageSize = _pageSize,
+    bool forceRefresh = false,
+  }) async {
+    try {
+      print(
+        '🔧 [TOOLS] Fetching tools for subcategory: "$subcategory" (page: ${page + 1})',
+      );
+
+      // Get all tools first
+      final allTools = await fetchAllToolsProducts(forceRefresh: forceRefresh);
+
+      // Filter by subcategory metafield
+      final filteredTools = subcategory.toLowerCase() == 'all'
+          ? allTools
+          : subcategory.toLowerCase() == 'other'
+          ? allTools.where((tool) {
+              // "Other" includes tools with no subcategory or empty subcategory
+              return tool.subcategory == null || tool.subcategory!.isEmpty;
+            }).toList()
+          : allTools.where((tool) {
+              return tool.subcategory != null &&
+                  tool.subcategory!.toLowerCase() == subcategory.toLowerCase();
+            }).toList();
+
+      print(
+        '🔧 [TOOLS] Filtered ${filteredTools.length} tools for subcategory "$subcategory"',
+      );
+
+      // Apply pagination
+      final startIndex = page * pageSize;
+      final endIndex = (startIndex + pageSize).clamp(0, filteredTools.length);
+
+      if (startIndex >= filteredTools.length) {
+        print(
+          '✅ [TOOLS] Page ${page + 1} is beyond available data for subcategory "$subcategory"',
+        );
+        return [];
+      }
+
+      final pageTools = filteredTools.sublist(startIndex, endIndex);
+
+      print(
+        '✅ [TOOLS] Returning ${pageTools.length} tools for subcategory "$subcategory" (page ${page + 1})',
+      );
+      return pageTools;
+    } catch (e) {
+      print('❌ [TOOLS] Error fetching tools by subcategory: $e');
+      return [];
+    }
+  }
+
+  /// Get total count of tools for a specific subcategory
+  static Future<int> getToolsCountBySubcategory({
+    required String subcategory,
+    bool forceRefresh = false,
+  }) async {
+    try {
+      final allTools = await fetchAllToolsProducts(forceRefresh: forceRefresh);
+
+      final count = subcategory.toLowerCase() == 'all'
+          ? allTools.length
+          : subcategory.toLowerCase() == 'other'
+          ? allTools.where((tool) {
+              return tool.subcategory == null || tool.subcategory!.isEmpty;
+            }).length
+          : allTools.where((tool) {
+              return tool.subcategory != null &&
+                  tool.subcategory!.toLowerCase() == subcategory.toLowerCase();
+            }).length;
+
+      print('📊 [TOOLS] Total tools for subcategory "$subcategory": $count');
+      return count;
+    } catch (e) {
+      print('❌ [TOOLS] Error getting tools count by subcategory: $e');
+      return 0;
+    }
+  }
+
   // Private helper methods
 
   /// Fetch metafields for a product
@@ -260,18 +389,39 @@ class ToolsService {
         final data = jsonDecode(response.body);
         final metafieldsList = data['metafields'] as List? ?? [];
 
+        print(
+          '🔍 [TOOLS] Product $productId has ${metafieldsList.length} metafields',
+        );
+
         final metafields = <String, dynamic>{};
         for (final metafield in metafieldsList) {
           final key = metafield['key'] as String?;
           final value = metafield['value'];
           if (key != null) {
             metafields[key] = value;
+            print('🔍 [TOOLS] Metafield: $key = $value');
           }
+        }
+
+        // Check for both 'subcategory' and 'subcategories'
+        if (metafields.containsKey('subcategory')) {
+          print('✅ [TOOLS] Found subcategory: ${metafields['subcategory']}');
+        } else if (metafields.containsKey('subcategories')) {
+          print(
+            '✅ [TOOLS] Found subcategories (plural): ${metafields['subcategories']}',
+          );
+        } else {
+          print(
+            '⚠️ [TOOLS] No subcategory/subcategories metafield found for product $productId',
+          );
         }
 
         return metafields;
       }
 
+      print(
+        '❌ [TOOLS] Failed to fetch metafields, status: ${response.statusCode}',
+      );
       return {};
     } catch (e) {
       print('❌ [TOOLS] Error fetching metafields for product $productId: $e');
@@ -314,7 +464,39 @@ class ToolsService {
 
       return [];
     } catch (e) {
-      print('❌ [TOOLS] Error retrieving all cached tools: $e');
+      print('❌ [TOOLS] Error retrieving cached tools: $e');
+      return [];
+    }
+  }
+
+  /// Get paged cached tools (optimized for pagination)
+  static Future<List<ToolProduct>> _getPagedCachedTools(
+    int page,
+    int pageSize,
+  ) async {
+    try {
+      // Get all cached tools
+      final allCachedTools = await _getAllCachedTools();
+
+      if (allCachedTools.isEmpty) {
+        return [];
+      }
+
+      // Calculate pagination slice
+      final startIndex = page * pageSize;
+      final endIndex = (startIndex + pageSize).clamp(0, allCachedTools.length);
+
+      if (startIndex >= allCachedTools.length) {
+        return [];
+      }
+
+      final pagedTools = allCachedTools.sublist(startIndex, endIndex);
+      print(
+        '💾 [TOOLS] Retrieved ${pagedTools.length} cached tools for page ${page + 1} (from ${startIndex + 1} to $endIndex)',
+      );
+      return pagedTools;
+    } catch (e) {
+      print('❌ [TOOLS] Error retrieving paged cached tools: $e');
       return [];
     }
   }

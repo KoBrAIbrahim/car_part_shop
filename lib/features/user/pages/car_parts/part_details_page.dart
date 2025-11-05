@@ -33,17 +33,134 @@ class _PartDetailsPageState extends State<PartDetailsPage> {
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${widget.part.displayTitle} ${'user.car_parts.added_to_cart'.tr()}'),
-          backgroundColor: AppColors.success,
-          behavior: SnackBarBehavior.floating,
-          action: SnackBarAction(
-            label: 'user.car_parts.view_cart'.tr(),
-            textColor: Colors.white,
-            onPressed: () => context.go('/cart'),
-          ),
-        ),
+      // Show success dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext dialogContext) {
+          // Auto-close after 3 seconds
+          Future.delayed(const Duration(seconds: 3), () {
+            if (Navigator.canPop(dialogContext)) {
+              Navigator.of(dialogContext).pop();
+            }
+          });
+
+          final isDark = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
+
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppColors.getCardBackground(isDark),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.yellow.withOpacity(0.3),
+                    blurRadius: 20,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Success icon
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: AppColors.yellow.withOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.check_circle_rounded,
+                      size: 50,
+                      color: AppColors.yellow,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  
+                  // Success message
+                  Text(
+                    'user.car_parts.added_to_cart'.tr(),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.getTextColor(isDark),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  
+                  // Product name
+                  Text(
+                    widget.part.displayTitle,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.getTextColor(isDark).withOpacity(0.8),
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  
+                  // Quantity
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.yellow.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.yellow.withOpacity(0.3),
+                      ),
+                    ),
+                    child: Text(
+                      '${'user.car_parts.quantity'.tr()}: $_quantity',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.getTextColor(isDark),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  
+                  // View Cart button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(dialogContext).pop();
+                        context.go('/cart');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.yellow,
+                        foregroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Text(
+                        'user.car_parts.view_cart'.tr(),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       );
     } catch (e) {
       if (!mounted) return;
@@ -289,7 +406,7 @@ class _PartDetailsPageState extends State<PartDetailsPage> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         side: BorderSide(color: AppColors.getDivider(isDark)),
                       ),
-                      child: Text('Back', style: TextStyle(color: AppColors.getTextColor(isDark))),
+                      child: Text('common.back'.tr(), style: TextStyle(color: AppColors.getTextColor(isDark))),
                     ),
                   ),
                   const SizedBox(width: 12),

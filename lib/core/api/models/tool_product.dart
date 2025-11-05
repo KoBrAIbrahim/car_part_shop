@@ -24,6 +24,7 @@ class ToolProduct {
   final String? garagePrice;
   final String? metafieldProductType;
   final String? metafieldDescription;
+  final String? subcategory;
 
   ToolProduct({
     required this.id,
@@ -45,6 +46,7 @@ class ToolProduct {
     this.garagePrice,
     this.metafieldProductType,
     this.metafieldDescription,
+    this.subcategory,
   });
 
   /// Create from Shopify Admin API JSON response
@@ -68,6 +70,10 @@ class ToolProduct {
     final garagePrice = metafields['garage_price']?.toString();
     final metafieldProductType = metafields['product_type']?.toString();
     final metafieldDescription = metafields['description']?.toString();
+    // Check both 'subcategory' and 'subcategories' (plural)
+    final subcategory =
+        metafields['subcategory']?.toString() ??
+        metafields['subcategories']?.toString();
 
     return ToolProduct(
       id: productJson['id']?.toString() ?? '',
@@ -94,6 +100,7 @@ class ToolProduct {
       garagePrice: garagePrice,
       metafieldProductType: metafieldProductType,
       metafieldDescription: metafieldDescription,
+      subcategory: subcategory,
     );
   }
 
@@ -119,6 +126,7 @@ class ToolProduct {
       garagePrice: json['garagePrice'],
       metafieldProductType: json['metafieldProductType'],
       metafieldDescription: json['metafieldDescription'],
+      subcategory: json['subcategory'],
     );
   }
 
@@ -144,6 +152,7 @@ class ToolProduct {
       'garagePrice': garagePrice,
       'metafieldProductType': metafieldProductType,
       'metafieldDescription': metafieldDescription,
+      'subcategory': subcategory,
     };
   }
 
@@ -164,7 +173,7 @@ class ToolProduct {
     if (garagePrice != null) {
       final gPrice = double.tryParse(garagePrice!) ?? 0.0;
       if (gPrice > 0) {
-        return '₪${gPrice.toStringAsFixed(0)} (Garage Price)';
+        return '₪${gPrice.toStringAsFixed(0)}';
       }
     }
 
